@@ -106,7 +106,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/login_register_btn_bg"
-        android:text="sign in"
+        android:text="@string/login_activity_button"
         android:textColor="@android:color/white" />
 
 

@@ -1,5 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -52,8 +53,10 @@ public class LecturerMainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Create a new lecture..", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Intent addScheduleIntent = new Intent(LecturerMainActivity.this, AddScheduleActivity.class);
+                startActivity(addScheduleIntent);
+
             }
         });
 

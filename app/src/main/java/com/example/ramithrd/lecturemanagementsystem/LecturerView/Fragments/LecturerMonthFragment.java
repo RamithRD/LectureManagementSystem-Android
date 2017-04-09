@@ -29,7 +29,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
     private MaterialCalendarView calendarView;
     private TextView selectedDateText;
-
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
 
     public LecturerMonthFragment() {
