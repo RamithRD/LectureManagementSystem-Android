@@ -23,7 +23,11 @@
             android:name=".LecturerView.Activities.LecturerMainActivity"
             android:label="@string/title_activity_lecturer_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LecturerView.Activities.AddScheduleActivity"></activity>
+
+        <activity
+            android:name=".LecturerView.Activities.AddScheduleActivity"
+            android:parentActivityName=".LecturerView.Activities.LecturerMainActivity"
+            android:label="Schedule Lecture"/>
     </application>
 
 </manifest>
