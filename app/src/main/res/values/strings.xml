@@ -9,4 +9,6 @@
 
     <string name="login_activity_button">Sign In</string>
     <string name="schedule_activity_button">Add Schedule</string>
+    <string name="lec_start_time">Start Time</string>
+    <string name="lec_end_time">End Time</string>
 </resources>

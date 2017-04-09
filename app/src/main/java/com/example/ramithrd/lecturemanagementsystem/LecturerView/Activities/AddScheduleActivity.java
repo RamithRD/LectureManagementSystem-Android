@@ -7,22 +7,32 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
+
+import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
+import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.example.ramithrd.lecturemanagementsystem.R;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
 
 import java.util.Calendar;
 
 public class AddScheduleActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
-    private Button pickLecTime;
+    private ImageButton pickLecTime;
+    private EditText selectedStartTimeTxt;
+    private EditText selectedEndTimeTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_schedule);
 
-        pickLecTime = (Button) findViewById(R.id.lecTimeBtn);
+        selectedStartTimeTxt = (EditText) findViewById(R.id.schedule_picked_layout);
+        selectedEndTimeTxt = (EditText) findViewById(R.id.schedule_end_time);
+
+        pickLecTime = (ImageButton) findViewById(R.id.lecTimeBtn);
         pickLecTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,10 +44,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                         now.get(Calendar.MINUTE),
                         false
                 );
-                tpd.setThemeDark(false);
-                tpd.dismissOnPause(true);
-                tpd.enableSeconds(false);
-                tpd.setVersion(TimePickerDialog.Version.VERSION_2);
                 tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
@@ -50,19 +56,27 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         });
     }
 
-    @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
-        String minuteString = minute < 10 ? "0"+minute : ""+minute;
-        String secondString = second < 10 ? "0"+second : ""+second;
-        String time = "You picked the following time: "+hourString+"h"+minuteString+"m"+secondString+"s";
-        System.out.println(time);
-    }
+
+
 
     @Override
     public void onResume() {
         super.onResume();
-        TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
-        if(tpd != null) tpd.setOnTimeSetListener(this);
+
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+
+        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
+        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+        String hourStringEnd = hourOfDayEnd < 10 ? "0"+hourOfDayEnd : ""+hourOfDayEnd;
+        String minuteStringEnd = minuteEnd < 10 ? "0"+minuteEnd : ""+minuteEnd;
+
+        String startTime = hourString+"."+minuteString;
+        String endTime = hourStringEnd+"."+minuteStringEnd;
+        selectedStartTimeTxt.setText(startTime);
+        selectedEndTimeTxt.setText(endTime);
+
     }
 }
