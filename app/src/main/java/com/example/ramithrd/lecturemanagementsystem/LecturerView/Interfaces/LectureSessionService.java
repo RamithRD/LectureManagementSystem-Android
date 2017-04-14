@@ -27,7 +27,7 @@ public interface LectureSessionService {
     Call<List<University>> getUniversities(@Path("lecturerId")String lecturerId);
 
     @GET("Programmes/{lecturerId}/{universityId}")
-    Call<List<Programme>> getProgrammes(@Path("lecturerId")String lecturerId, @Path("programmeId")String universityId);
+    Call<List<Programme>> getProgrammes(@Path("lecturerId")String lecturerId, @Path("universityId")String universityId);
 
     @GET("Modules/{lecturerId}/{programmeId}")
     Call<List<Module>> getModules(@Path("lecturerId")String lecturerId, @Path("programmeId")String programmeId);

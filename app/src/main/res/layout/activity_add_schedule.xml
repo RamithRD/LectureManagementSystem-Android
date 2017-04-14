@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/unis_spinner"
                 android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:padding="5dp"
                 android:layout_margin="5dp"
                 app:ms_background_color="#aeafaf"
-                android:hint="Select University"/>
+                android:text="Select University"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/programmes_spinner"
@@ -32,7 +33,7 @@
                 android:padding="5dp"
                 android:layout_margin="5dp"
                 app:ms_background_color="#aeafaf"
-                android:hint="Select Programme"/>
+                android:text="Select Programme"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/batch_spinner"
@@ -41,7 +42,7 @@
                 android:padding="5dp"
                 android:layout_margin="5dp"
                 app:ms_background_color="#aeafaf"
-                android:hint="Select Batch"/>
+                android:text="Select Batch"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/module_spinner"
@@ -50,7 +51,7 @@
                 android:padding="5dp"
                 android:layout_margin="5dp"
                 app:ms_background_color="#aeafaf"
-                android:hint="Select Module"/>
+                android:text="Select Module"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/hall_spinner"
@@ -59,7 +60,7 @@
                 android:padding="5dp"
                 android:layout_margin="5dp"
                 app:ms_background_color="#aeafaf"
-                android:hint="Select Lecture Hall"/>
+                android:text="Select Lecture Hall"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

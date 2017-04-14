@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,6 +30,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -59,10 +62,20 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
     private List<Module> modulesList;
     private List<LectureHall> lectureHallsList;
 
+    private HashMap<String, String> uniMap;
+    private HashMap<String, String> programmeMap;
+    private HashMap<String, String> moduleMap;
+
     private int mYear, mMonth, mDay;
 
     private GlobalClass globalClass;
     private String lecturerID = "";
+
+    private String selectedUniversity= "";
+    private String selectedProgramme = "";
+    private String selectedModule = "";
+    private String selectedBatch = "";
+    private String selectedLecHall = "";
 
     private ProgressDialog mLoadDetailsDialog;
 
@@ -84,8 +97,9 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         selectedEndTimeTxt = (EditText) findViewById(R.id.schedule_end_time);
         selectedDateTxt = (EditText) findViewById(R.id.schedule_picked_date);
 
-        universitiesSpinner = (MaterialSpinner) findViewById(R.id.unis_spinner);
-        lectureHallsSpinner = (MaterialSpinner) findViewById(R.id.hall_spinner);
+        uniMap = new HashMap<>();
+        programmeMap = new HashMap<>();
+        moduleMap = new HashMap<>();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
@@ -95,22 +109,143 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
         lecSessionService = retrofit.create(LectureSessionService.class);
 
-        Call<List<University>> uniRequest =  lecSessionService.getUniversities(globalClass.getLecturerID());
+        universitiesSpinner = (MaterialSpinner) findViewById(R.id.unis_spinner);
+        universitiesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+                selectedUniversity = item.toString();
+                System.out.println("I2K University :"+selectedUniversity);
+
+                Call<List<Programme>> programmeRequest = lecSessionService.getProgrammes(lecturerID,uniMap.get(selectedUniversity));
+                programmeRequest.enqueue(new Callback<List<Programme>>() {
+                    @Override
+                    public void onResponse(Call<List<Programme>> call, Response<List<Programme>> response) {
+                        List<Programme> programmesList = response.body();
+
+                        List<String> progList = new ArrayList<String>();
+                        progList.add("Select Programme");
+
+                        for(Programme prog: programmesList){
+
+                            progList.add(prog.getName());
+                            programmeMap.put(prog.getName(),prog.getProgrammeId());
+
+                        }
+
+                        programmesSpinner.setItems(progList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Programme>> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+        programmesSpinner = (MaterialSpinner) findViewById(R.id.programmes_spinner);
+        programmesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+
+                selectedProgramme = item.toString();
+                System.out.println("I2K Programme :"+selectedProgramme);
+                Call<List<Batch>> batchRequest = lecSessionService.getBatches(lecturerID,programmeMap.get(selectedProgramme));
+                batchRequest.enqueue(new Callback<List<Batch>>() {
+                    @Override
+                    public void onResponse(Call<List<Batch>> call, Response<List<Batch>> response) {
+                        List<Batch> batchessList = response.body();
+
+                        List<String> batchList = new ArrayList<String>();
+                        batchList.add("Select Batch");
+
+                        for(Batch batch: batchessList){
+
+                            batchList.add(batch.getBatchId());
+
+                        }
+
+                        batchesSpinner.setItems(batchList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Batch>> call, Throwable t) {
+
+                    }
+                });
+
+                Call<List<Module>> modulesRequest = lecSessionService.getModules(lecturerID,programmeMap.get(selectedProgramme));
+                modulesRequest.enqueue(new Callback<List<Module>>() {
+                    @Override
+                    public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
+                        List<Module> modulesList = response.body();
+
+                        List<String> moduleList = new ArrayList<String>();
+                        moduleList.add("Select Module");
+
+                        for(Module module: modulesList){
+
+                            moduleList.add(module.getName());
+                            moduleMap.put(module.getName(),module.getModuleId());
+
+                        }
+
+                        modulesSpinner.setItems(moduleList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Module>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+        });
+        batchesSpinner = (MaterialSpinner) findViewById(R.id.batch_spinner);
+        batchesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                selectedBatch = item.toString();
+                System.out.println("I2K Batch :"+selectedBatch);
+            }
+        });
+        modulesSpinner = (MaterialSpinner) findViewById(R.id.module_spinner);
+        modulesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                String moduleName = item.toString();
+                selectedModule = moduleMap.get(moduleName);
+                System.out.println("I2K Module :"+selectedModule);
+            }
+        });
+        lectureHallsSpinner = (MaterialSpinner) findViewById(R.id.hall_spinner);
+        lectureHallsSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                selectedLecHall = item.toString();
+                System.out.println("I2K Lec-Hall :"+selectedLecHall);
+            }
+        });
+
+
+        Call<List<University>> uniRequest =  lecSessionService.getUniversities(lecturerID);
         uniRequest.enqueue(new Callback<List<University>>() {
             @Override
             public void onResponse(Call<List<University>> call, Response<List<University>> response) {
 
-                List<University> hallList = response.body();
+                List<University> universityList = response.body();
 
-                List<String> hallNamesList = new ArrayList<String>();
+                List<String> uniList = new ArrayList<String>();
+                uniList.add("Select University");
 
-                for(University uni : hallList){
+                for(University uni : universityList){
 
-                    hallNamesList.add(uni.getName());
+                    uniList.add(uni.getName());
+                    uniMap.put(uni.getName(),uni.getUniversityId());
 
                 }
 
-                universitiesSpinner.setItems(hallNamesList);
+                universitiesSpinner.setItems(uniList);
 
             }
 
@@ -119,6 +254,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
             }
         });
+
+
 
         Call<List<LectureHall>> lecHallRequest = lecSessionService.getLectureHalls();
         lecHallRequest.enqueue(new Callback<List<LectureHall>>() {
@@ -129,9 +266,11 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                 List<LectureHall> hallList = response.body();
 
                 List<String> hallNamesList = new ArrayList<String>();
+                hallNamesList.add("Select LectureHall");
 
                 for(LectureHall lec : hallList){
 
+                    //get faculty
                     hallNamesList.add(lec.getLectureHallName());
 
                 }

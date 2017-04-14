@@ -7,10 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.example.ramithrd.lecturemanagementsystem.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LecturerTodayFragment extends Fragment {
+
+    private List<String> lecfesfsturst;
 
     public LecturerTodayFragment() {
         // Required empty public constructor
@@ -32,7 +39,12 @@ public class LecturerTodayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lecturer_today, container, false);
+        View view = inflater.inflate(R.layout.fragment_lecturer_today, container, false);
+
+
+
+        return view;
+
     }
 
 
