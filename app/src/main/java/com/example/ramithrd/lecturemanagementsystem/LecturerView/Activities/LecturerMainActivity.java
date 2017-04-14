@@ -19,17 +19,32 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerTodayFragment;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerWeekFragment;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.GetLectureHalls;
+import com.example.ramithrd.lecturemanagementsystem.Models.LectureHall;
 import com.example.ramithrd.lecturemanagementsystem.R;
+
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LecturerMainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+
+    public static final String ENDPOINT_URL  = "http://54.214.72.150/Service.svc/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +75,39 @@ public class LecturerMainActivity extends AppCompatActivity {
             }
         });
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ENDPOINT_URL)
+                .client(getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        GetLectureHalls service = retrofit.create(GetLectureHalls.class);
+        Call<List<LectureHall>> call = service.getLectureHalls();
+        call.enqueue(new Callback<List<LectureHall>>() {
+            @Override
+            public void onResponse(Call<List<LectureHall>> call, Response<List<LectureHall>> response) {
+                System.out.println("SUCCESS");
+                List<LectureHall> hallList = response.body();
+                Toast.makeText(getApplicationContext(),"SUCCESS - LIST SIZE "+hallList.size(),Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<LectureHall>> call, Throwable t) {
+                System.out.println("FAILURE: "+t.getMessage());
+            }
+        });
+
+
+    }
+
+    private static OkHttpClient getOkHttpClient(){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        OkHttpClient okClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+        return okClient;
     }
 
 

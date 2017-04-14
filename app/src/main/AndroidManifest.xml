@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ramithrd.lecturemanagementsystem">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".GlobalClass"
         android:allowBackup="true"
@@ -23,11 +25,15 @@
             android:name=".LecturerView.Activities.LecturerMainActivity"
             android:label="@string/title_activity_lecturer_main"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".LecturerView.Activities.AddScheduleActivity"
-            android:parentActivityName=".LecturerView.Activities.LecturerMainActivity"
-            android:label="Schedule Lecture"/>
+            android:label="Schedule Lecture"
+            android:parentActivityName=".LecturerView.Activities.LecturerMainActivity" />
+        <activity
+            android:name=".StudentView.Activities.StudentMainActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_activity_student_main"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

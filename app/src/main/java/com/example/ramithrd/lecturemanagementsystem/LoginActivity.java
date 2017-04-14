@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecturerMainActivity;
+import com.example.ramithrd.lecturemanagementsystem.StudentView.Activities.StudentMainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
