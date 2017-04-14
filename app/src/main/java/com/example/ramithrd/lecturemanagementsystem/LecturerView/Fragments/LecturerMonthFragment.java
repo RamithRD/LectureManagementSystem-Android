@@ -1,8 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ramithrd.lecturemanagementsystem.Models.EventDecorator;
+import com.example.ramithrd.lecturemanagementsystem.Model.EventDecorator;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 

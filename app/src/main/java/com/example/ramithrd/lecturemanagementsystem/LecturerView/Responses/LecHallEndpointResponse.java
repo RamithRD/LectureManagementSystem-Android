@@ -1,6 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Responses;
 
-import com.example.ramithrd.lecturemanagementsystem.Models.LectureHall;
+import com.example.ramithrd.lecturemanagementsystem.Model.LectureHall;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,11 +1,12 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces;
 
-import com.example.ramithrd.lecturemanagementsystem.Models.Batch;
-import com.example.ramithrd.lecturemanagementsystem.Models.LectureHall;
-import com.example.ramithrd.lecturemanagementsystem.Models.LectureSession;
-import com.example.ramithrd.lecturemanagementsystem.Models.Module;
-import com.example.ramithrd.lecturemanagementsystem.Models.Programme;
-import com.example.ramithrd.lecturemanagementsystem.Models.University;
+import com.example.ramithrd.lecturemanagementsystem.Model.Batch;
+import com.example.ramithrd.lecturemanagementsystem.Model.LectureHall;
+import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
+import com.example.ramithrd.lecturemanagementsystem.Model.LectureSessionResponse;
+import com.example.ramithrd.lecturemanagementsystem.Model.Module;
+import com.example.ramithrd.lecturemanagementsystem.Model.Programme;
+import com.example.ramithrd.lecturemanagementsystem.Model.University;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -38,26 +40,24 @@ public interface LectureSessionService {
     @GET("LectureHalls")
     Call<List<LectureHall>> getLectureHalls();
 
+    @Headers("Content-type: application/json")
     @POST("Session")
-    @FormUrlEncoded
-    Call<LectureSession> addLectureSession(@Body LectureSession lectureSession);
+    Call<Boolean> addLectureSession(@Body LectureSession lectureSession);
 
     @GET("DeleteSession/{sessionId}")
     Call<Boolean> cancelSession(@Path("sessionId")String sessionId);
 
     @PUT("UpdateSessionDateTime")
-    @FormUrlEncoded
     Call<Boolean> updateSessionDateTime(@Body LectureSession lectureSession);
 
     @PUT("UpdateSession")
-    @FormUrlEncoded
     Call<Boolean> updateSession(@Body LectureSession lectureSession);
 
     @GET("Session/{sessionId}")
-    Call<LectureSession> getSingleSession(@Path("sessionId")String sessionId);
+    Call<LectureSessionResponse> getSingleSession(@Path("sessionId")String sessionId);
 
     //to generate QR - attendance
     @GET("CurrentSession/{lecturerId}")
-    Call<LectureSession> getCurrentSession(@Path("lecturerId")String lecturerId);
+    Call<LectureSessionResponse> getCurrentSession(@Path("lecturerId")String lecturerId);
 
 }

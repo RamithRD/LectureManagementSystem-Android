@@ -1,9 +1,9 @@
-package com.example.ramithrd.lecturemanagementsystem.Models;
+package com.example.ramithrd.lecturemanagementsystem.Model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LectureSession {
+public class LectureSessionResponse {
 
 @SerializedName("Batch")
 @Expose

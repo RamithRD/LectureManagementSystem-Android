@@ -1,4 +1,4 @@
-package com.example.ramithrd.lecturemanagementsystem.Models;
+package com.example.ramithrd.lecturemanagementsystem.Model;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
