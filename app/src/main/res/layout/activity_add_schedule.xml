@@ -7,138 +7,167 @@
     android:orientation="vertical"
     tools:context="com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.AddScheduleActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Lecture Details"
-        android:layout_gravity="center"
-        android:textSize="23sp"
-        android:layout_marginTop="10dp"/>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_email"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/orTxt"
-        android:padding="5dp">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/login_input_email"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Title"
-            android:inputType="text"
-            android:textColor="@color/colorPrimaryDark"
-            android:textColorHint="@color/colorPrimaryDark"
-            android:textColorLink="@color/colorPrimaryDark"
-            android:textSize="15sp"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/schedule_date_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/schedule_picked_date"
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/unis_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="Lecture Date"
-                android:inputType="text"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/colorPrimaryDark"
-                android:textColorLink="@color/colorPrimaryDark"
-                android:textSize="15sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#aeafaf"
+                android:hint="Select University"/>
 
-        <ImageButton
-            android:id="@+id/lecDateBtn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:src="@drawable/ic_calendar_grey600_24dp"
-            android:layout_weight="2"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="5">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/schedule_time_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_weight="2">
-
-            <EditText
-                android:id="@+id/schedule_picked_layout"
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/programmes_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/lec_start_time"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/colorPrimaryDark"
-                android:textColorLink="@color/colorPrimaryDark"
-                android:textSize="15sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#aeafaf"
+                android:hint="Select Programme"/>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/schedule_etime_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_weight="2">
-
-            <EditText
-                android:id="@+id/schedule_end_time"
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/batch_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:hint="@string/lec_end_time"
-                android:inputType="text"
-                android:textColor="@color/colorPrimaryDark"
-                android:textColorHint="@color/colorPrimaryDark"
-                android:textColorLink="@color/colorPrimaryDark"
-                android:textSize="15sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#aeafaf"
+                android:hint="Select Batch"/>
 
-        <ImageButton
-            android:id="@+id/lecTimeBtn"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:src="@drawable/ic_clock_grey600_24dp"
-            android:layout_weight="1"/>
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/module_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#aeafaf"
+                android:hint="Select Module"/>
 
-    </LinearLayout>
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/hall_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#aeafaf"
+                android:hint="Select Lecture Hall"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/schedule_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/schedule_picked_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="Lecture Date"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/lecDateBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:src="@drawable/ic_calendar_grey600_24dp"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/schedule_time_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/schedule_picked_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/lec_start_time"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/schedule_etime_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/schedule_end_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/lec_end_time"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/lecTimeBtn"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:src="@drawable/ic_clock_grey600_24dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
 
 
-    <Button
-        android:id="@+id/btn_signin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/login_register_btn_bg"
-        android:text="@string/schedule_activity_button"
-        android:textColor="@android:color/white" />
+            <Button
+                android:id="@+id/btn_signin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/login_register_btn_bg"
+                android:text="@string/schedule_activity_button"
+                android:textColor="@android:color/white" />
 
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

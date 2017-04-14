@@ -8,9 +8,19 @@ import android.app.Application;
 
 public class GlobalClass extends Application {
 
+    private String lecturerID;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
     }
 
+    public String getLecturerID() {
+        return lecturerID;
+    }
+
+    public void setLecturerID(String lecturerID) {
+        this.lecturerID = lecturerID;
+    }
 }

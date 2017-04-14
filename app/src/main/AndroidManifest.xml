@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LecturerView.Activities.AddScheduleActivity"
-            android:label="Schedule Lecture"
+            android:label="Add Lecture Session"
             android:parentActivityName=".LecturerView.Activities.LecturerMainActivity" />
         <activity
             android:name=".StudentView.Activities.StudentMainActivity"
