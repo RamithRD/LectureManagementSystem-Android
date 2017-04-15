@@ -335,7 +335,7 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                        selectedDateTxt.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                        selectedDateTxt.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
                         selectedLecDate = selectedDateTxt.getText().toString();
 
                     }
@@ -352,25 +352,32 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
     private void addLecture() {
 
-        LectureSession lecSession = new LectureSession(lecturerID,lecturerID,selectedBatchId,selectedModuleId,selectedUniversityId,selectedProgrammeId,selectedLecHallId,lecFaculty,selectedLecStartTime,selectedLecEndTime,selectedLecDate);
+        LectureSession lecSession = new LectureSession();
+        lecSession.setUserId(lecturerID);
+        lecSession.setLecturerId(lecturerID);
+        lecSession.setBatchId(selectedBatchId);
+        lecSession.setModuleId(selectedModuleId);
+        lecSession.setUniversityId(selectedUniversityId);
+        lecSession.setProgrammeId(selectedProgrammeId);
+        lecSession.setLectureHallName(selectedLecHallId);
+        lecSession.setFaculty(lecFaculty);
+        lecSession.setSessionStartTime(selectedLecStartTime);
+        lecSession.setSessionEndTime(selectedLecEndTime);
+        lecSession.setSessionDate(selectedLecDate);
+
         Call<Boolean> addLectureSession = lecSessionService.addLectureSession(lecSession);
         addLectureSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                boolean lecStatus = response.body();
-                if(lecStatus){
-                    System.out.println("SUCCESS! LEC ADDED");
-                }else{
-                    System.out.println("FAILED!");
-                }
-
+                System.out.println("Success");
             }
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
-                System.out.println("FAILED! check exceptions");
+                System.out.println("Failure "+t.getMessage());
             }
         });
+
 
 
     }

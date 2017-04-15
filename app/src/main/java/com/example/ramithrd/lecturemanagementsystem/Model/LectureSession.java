@@ -1,57 +1,273 @@
 package com.example.ramithrd.lecturemanagementsystem.Model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-/**
- * Created by RamithRD on 4/15/2017.
- */
 
 public class LectureSession {
 
-    @SerializedName("User_Id")
-    public String User_Id;
+@SerializedName("Batch")
+@Expose
+private Object batch;
+@SerializedName("Batch_Id")
+@Expose
+private String batchId;
+@SerializedName("Faculty")
+@Expose
+private String faculty;
+@SerializedName("Lecture_Hall")
+@Expose
+private Object lectureHall;
+@SerializedName("Lecture_Hall_Name")
+@Expose
+private String lectureHallName;
+@SerializedName("Lecturer")
+@Expose
+private Object lecturer;
+@SerializedName("Lecturer_Id")
+@Expose
+private String lecturerId;
+@SerializedName("Module")
+@Expose
+private Object module;
+@SerializedName("Module_Id")
+@Expose
+private String moduleId;
+@SerializedName("Module_Name")
+@Expose
+private String moduleName;
+@SerializedName("Programme")
+@Expose
+private Object programme;
+@SerializedName("Programme_Id")
+@Expose
+private String programmeId;
+@SerializedName("Programme_Name")
+@Expose
+private String programmeName;
+@SerializedName("Session_Date")
+@Expose
+private String sessionDate;
+@SerializedName("Session_End_Time")
+@Expose
+private Object sessionEndTime;
+@SerializedName("Session_End_Time_Text")
+@Expose
+private String sessionEndTimeText;
+@SerializedName("Session_Id")
+@Expose
+private Integer sessionId;
+@SerializedName("Session_Start_Time")
+@Expose
+private Object sessionStartTime;
+@SerializedName("Session_Start_Time_Text")
+@Expose
+private String sessionStartTimeText;
+@SerializedName("Students")
+@Expose
+private Object students;
+@SerializedName("University")
+@Expose
+private Object university;
+@SerializedName("University_Id")
+@Expose
+private String universityId;
+@SerializedName("University_Name")
+@Expose
+private String universityName;
+@SerializedName("User_Id")
+@Expose
+private String userId;
 
-    @SerializedName("Lecturer_Id")
-    public String Lecturer_Id;
+public Object getBatch() {
+return batch;
+}
 
-    @SerializedName("Batch_Id")
-    public String Batch_Id;
+public void setBatch(Object batch) {
+this.batch = batch;
+}
 
-    @SerializedName("Module_Id")
-    public String Module_Id;
+public String getBatchId() {
+return batchId;
+}
 
-    @SerializedName("University_Id")
-    public String University_Id;
+public void setBatchId(String batchId) {
+this.batchId = batchId;
+}
 
-    @SerializedName("Programme_Id")
-    public String Programme_Id;
+public String getFaculty() {
+return faculty;
+}
 
-    @SerializedName("Lecture_Hall_Name")
-    public String Lecture_Hall_Name;
+public void setFaculty(String faculty) {
+this.faculty = faculty;
+}
 
-    @SerializedName("Faculty")
-    public String Faculty;
+public Object getLectureHall() {
+return lectureHall;
+}
 
-    @SerializedName("Session_Start_Time")
-    public String Session_Start_Time;
+public void setLectureHall(Object lectureHall) {
+this.lectureHall = lectureHall;
+}
 
-    @SerializedName("Session_End_Time")
-    public String Session_End_Time;
+public String getLectureHallName() {
+return lectureHallName;
+}
 
-    @SerializedName("Session_Date")
-    public String Session_Date;
+public void setLectureHallName(String lectureHallName) {
+this.lectureHallName = lectureHallName;
+}
 
-    public LectureSession(String user_Id, String lecturer_Id, String batch_Id, String module_Id, String university_Id, String programme_Id, String lecture_Hall_Name, String faculty, String session_Start_Time, String session_End_Time, String session_Date) {
-        User_Id = user_Id;
-        Lecturer_Id = lecturer_Id;
-        Batch_Id = batch_Id;
-        Module_Id = module_Id;
-        University_Id = university_Id;
-        Programme_Id = programme_Id;
-        Lecture_Hall_Name = lecture_Hall_Name;
-        Faculty = faculty;
-        Session_Start_Time = session_Start_Time;
-        Session_End_Time = session_End_Time;
-        Session_Date = session_Date;
-    }
+public Object getLecturer() {
+return lecturer;
+}
+
+public void setLecturer(Object lecturer) {
+this.lecturer = lecturer;
+}
+
+public String getLecturerId() {
+return lecturerId;
+}
+
+public void setLecturerId(String lecturerId) {
+this.lecturerId = lecturerId;
+}
+
+public Object getModule() {
+return module;
+}
+
+public void setModule(Object module) {
+this.module = module;
+}
+
+public String getModuleId() {
+return moduleId;
+}
+
+public void setModuleId(String moduleId) {
+this.moduleId = moduleId;
+}
+
+public String getModuleName() {
+return moduleName;
+}
+
+public void setModuleName(String moduleName) {
+this.moduleName = moduleName;
+}
+
+public Object getProgramme() {
+return programme;
+}
+
+public void setProgramme(Object programme) {
+this.programme = programme;
+}
+
+public String getProgrammeId() {
+return programmeId;
+}
+
+public void setProgrammeId(String programmeId) {
+this.programmeId = programmeId;
+}
+
+public String getProgrammeName() {
+return programmeName;
+}
+
+public void setProgrammeName(String programmeName) {
+this.programmeName = programmeName;
+}
+
+public String getSessionDate() {
+return sessionDate;
+}
+
+public void setSessionDate(String sessionDate) {
+this.sessionDate = sessionDate;
+}
+
+public Object getSessionEndTime() {
+return sessionEndTime;
+}
+
+public void setSessionEndTime(Object sessionEndTime) {
+this.sessionEndTime = sessionEndTime;
+}
+
+public String getSessionEndTimeText() {
+return sessionEndTimeText;
+}
+
+public void setSessionEndTimeText(String sessionEndTimeText) {
+this.sessionEndTimeText = sessionEndTimeText;
+}
+
+public Integer getSessionId() {
+return sessionId;
+}
+
+public void setSessionId(Integer sessionId) {
+this.sessionId = sessionId;
+}
+
+public Object getSessionStartTime() {
+return sessionStartTime;
+}
+
+public void setSessionStartTime(Object sessionStartTime) {
+this.sessionStartTime = sessionStartTime;
+}
+
+public String getSessionStartTimeText() {
+return sessionStartTimeText;
+}
+
+public void setSessionStartTimeText(String sessionStartTimeText) {
+this.sessionStartTimeText = sessionStartTimeText;
+}
+
+public Object getStudents() {
+return students;
+}
+
+public void setStudents(Object students) {
+this.students = students;
+}
+
+public Object getUniversity() {
+return university;
+}
+
+public void setUniversity(Object university) {
+this.university = university;
+}
+
+public String getUniversityId() {
+return universityId;
+}
+
+public void setUniversityId(String universityId) {
+this.universityId = universityId;
+}
+
+public String getUniversityName() {
+return universityName;
+}
+
+public void setUniversityName(String universityName) {
+this.universityName = universityName;
+}
+
+public String getUserId() {
+return userId;
+}
+
+public void setUserId(String userId) {
+this.userId = userId;
+}
+
 }
