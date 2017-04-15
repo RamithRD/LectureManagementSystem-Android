@@ -49,7 +49,7 @@ private String programmeName;
 private String sessionDate;
 @SerializedName("Session_End_Time")
 @Expose
-private Object sessionEndTime;
+private String sessionEndTime;
 @SerializedName("Session_End_Time_Text")
 @Expose
 private String sessionEndTimeText;
@@ -58,7 +58,7 @@ private String sessionEndTimeText;
 private Integer sessionId;
 @SerializedName("Session_Start_Time")
 @Expose
-private Object sessionStartTime;
+private String sessionStartTime;
 @SerializedName("Session_Start_Time_Text")
 @Expose
 private String sessionStartTimeText;
@@ -194,7 +194,7 @@ public Object getSessionEndTime() {
 return sessionEndTime;
 }
 
-public void setSessionEndTime(Object sessionEndTime) {
+public void setSessionEndTime(String sessionEndTime) {
 this.sessionEndTime = sessionEndTime;
 }
 
@@ -214,11 +214,11 @@ public void setSessionId(Integer sessionId) {
 this.sessionId = sessionId;
 }
 
-public Object getSessionStartTime() {
+public String getSessionStartTime() {
 return sessionStartTime;
 }
 
-public void setSessionStartTime(Object sessionStartTime) {
+public void setSessionStartTime(String sessionStartTime) {
 this.sessionStartTime = sessionStartTime;
 }
 

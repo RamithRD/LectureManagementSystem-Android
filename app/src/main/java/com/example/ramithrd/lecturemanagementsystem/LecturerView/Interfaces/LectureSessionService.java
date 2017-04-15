@@ -40,7 +40,7 @@ public interface LectureSessionService {
     Call<List<LectureHall>> getLectureHalls();
 
     @POST("Session")
-    Call<Boolean> addLectureSession(@Body LectureSession lectureSession);
+    Call<Boolean> AddSession(@Body LectureSession lectureSession);
 
     @GET("DeleteSession/{sessionId}")
     Call<Boolean> cancelSession(@Path("sessionId")String sessionId);

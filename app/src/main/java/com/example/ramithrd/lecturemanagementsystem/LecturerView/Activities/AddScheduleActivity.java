@@ -27,10 +27,19 @@ import com.example.ramithrd.lecturemanagementsystem.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -335,7 +344,7 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                        selectedDateTxt.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                        selectedDateTxt.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                         selectedLecDate = selectedDateTxt.getText().toString();
 
                     }
@@ -352,6 +361,43 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
     private void addLecture() {
 
+
+        String lecDateString = selectedLecDate+" "+"00:00:00";
+        String lecStartString = selectedLecDate+" "+selectedLecStartTime+".000";
+        String lecEndString = selectedLecDate+" "+selectedLecEndTime+".000";
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+
+        Date lecDateTime = new Date();
+        Date startDateTime = new Date();
+        Date endDateTime = new Date();
+        try {
+            lecDateTime = dateFormat.parse(lecDateString);
+            startDateTime = dateFormat.parse(lecStartString);
+            endDateTime = dateFormat.parse(lecEndString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar lecDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+        lecDateTimeCal.setTime(lecDateTime); // Where Value is a Date
+
+        Calendar startDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+        startDateTimeCal.setTime(startDateTime); // Where Value is a Date
+
+        Calendar endDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+        endDateTimeCal.setTime(endDateTime); // Where Value is a Date
+
+        final long lectureDate = lecDateTimeCal.getTime().getTime();
+        final String lecDate = "/Date("+lectureDate+")/";
+
+        final long lectureStartDateTime = startDateTimeCal.getTime().getTime();
+        final String lecStartDate = "/Date("+lectureStartDateTime+")/";
+        final long lectureEndDateTime = endDateTimeCal.getTime().getTime();
+        final String lecEndDate = "/Date("+lectureEndDateTime+")/";
+
+
+
         LectureSession lecSession = new LectureSession();
         lecSession.setUserId(lecturerID);
         lecSession.setLecturerId(lecturerID);
@@ -361,11 +407,13 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         lecSession.setProgrammeId(selectedProgrammeId);
         lecSession.setLectureHallName(selectedLecHallId);
         lecSession.setFaculty(lecFaculty);
-        lecSession.setSessionStartTime(selectedLecStartTime);
-        lecSession.setSessionEndTime(selectedLecEndTime);
-        lecSession.setSessionDate(selectedLecDate);
+        lecSession.setSessionStartTime(lecStartDate);
+        lecSession.setSessionEndTime(lecEndDate);
+        lecSession.setSessionDate(lecDate);
 
-        Call<Boolean> addLectureSession = lecSessionService.addLectureSession(lecSession);
+        System.out.println("DATE : "+lecDate+"\n LexStart :"+lecStartDate+"\n LecEnd : "+lecEndDate);
+
+        Call<Boolean> addLectureSession = lecSessionService.AddSession(lecSession);
         addLectureSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -397,8 +445,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         String hourStringEnd = hourOfDayEnd < 10 ? "0"+hourOfDayEnd : ""+hourOfDayEnd;
         String minuteStringEnd = minuteEnd < 10 ? "0"+minuteEnd : ""+minuteEnd;
 
-        String startTime = hourString+"."+minuteString;
-        String endTime = hourStringEnd+"."+minuteStringEnd;
+        String startTime = hourString+":"+minuteString+":00";
+        String endTime = hourStringEnd+":"+minuteStringEnd+":00";
 
         selectedLecStartTime = startTime;
         selectedLecEndTime = endTime;
