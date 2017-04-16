@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import okhttp3.OkHttpClient;
@@ -361,7 +362,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         String lecStartString = selectedLecDate+" "+selectedLecStartTime;
         String lecEndString = selectedLecDate+" "+selectedLecEndTime;
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         Date lecDateTime = new Date();
         Date startDateTime = new Date();
@@ -373,25 +375,26 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         } catch (ParseException e) {
             e.printStackTrace();
         }
+//
+//        TimeZone slTimeZone = TimeZone.getTimeZone("GMT+5:30");
+//
+//        Calendar lecDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
+//        lecDateTimeCal.setTime(lecDateTime); // Where Value is a Date
+//
+//        Calendar startDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
+//
+//        startDateTimeCal.setTime(startDateTime); // Where Value is a Date
+//
+//        Calendar endDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
+//        endDateTimeCal.setTime(endDateTime); // Where Value is a Date
 
-        Calendar lecDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
-        lecDateTimeCal.setTime(lecDateTime); // Where Value is a Date
-
-        Calendar startDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
-        startDateTimeCal.setTime(startDateTime); // Where Value is a Date
-
-        Calendar endDateTimeCal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
-        endDateTimeCal.setTime(endDateTime); // Where Value is a Date
-
-        final long lectureDate = lecDateTimeCal.getTime().getTime();
+        final long lectureDate = lecDateTime.getTime();
         final String lecDate = "/Date("+lectureDate+")/";
 
-        final long lectureStartDateTime = startDateTimeCal.getTime().getTime();
+        final long lectureStartDateTime = startDateTime.getTime();
         final String lecStartDate = "/Date("+lectureStartDateTime+")/";
-        final long lectureEndDateTime = endDateTimeCal.getTime().getTime();
+        final long lectureEndDateTime = endDateTime.getTime();
         final String lecEndDate = "/Date("+lectureEndDateTime+")/";
-
-
 
         LectureSession lecSession = new LectureSession();
         lecSession.setUserId(lecturerID);

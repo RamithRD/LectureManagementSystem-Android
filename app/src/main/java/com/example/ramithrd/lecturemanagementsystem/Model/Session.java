@@ -1,10 +1,13 @@
 package com.example.ramithrd.lecturemanagementsystem.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by RamithRD on 4/16/2017.
  */
 
-public class Session {
+public class Session implements Parcelable {
 
     private String lecture_Id;
     private String module_name;
@@ -96,4 +99,51 @@ public class Session {
     public void setLec_end_time(String lec_end_time) {
         this.lec_end_time = lec_end_time;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.lecture_Id);
+        dest.writeString(this.module_name);
+        dest.writeString(this.batch_name);
+        dest.writeString(this.university_name);
+        dest.writeString(this.programme_name);
+        dest.writeString(this.lecture_hall);
+        dest.writeString(this.faculty);
+        dest.writeString(this.lec_date);
+        dest.writeString(this.lec_start_time);
+        dest.writeString(this.lec_end_time);
+    }
+
+    public Session() {
+    }
+
+    protected Session(Parcel in) {
+        this.lecture_Id = in.readString();
+        this.module_name = in.readString();
+        this.batch_name = in.readString();
+        this.university_name = in.readString();
+        this.programme_name = in.readString();
+        this.lecture_hall = in.readString();
+        this.faculty = in.readString();
+        this.lec_date = in.readString();
+        this.lec_start_time = in.readString();
+        this.lec_end_time = in.readString();
+    }
+
+    public static final Parcelable.Creator<Session> CREATOR = new Parcelable.Creator<Session>() {
+        @Override
+        public Session createFromParcel(Parcel source) {
+            return new Session(source);
+        }
+
+        @Override
+        public Session[] newArray(int size) {
+            return new Session[size];
+        }
+    };
 }

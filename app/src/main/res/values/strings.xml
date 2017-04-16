@@ -12,4 +12,5 @@
     <string name="lec_start_time">Start Time</string>
     <string name="lec_end_time">End Time</string>
     <string name="title_activity_student_main">StudentMainActivity</string>
+    <string name="title_activity_sessions">SessionsActivity</string>
 </resources>

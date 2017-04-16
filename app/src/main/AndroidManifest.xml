@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ramithrd.lecturemanagementsystem">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".GlobalClass"
@@ -31,9 +31,10 @@
             android:parentActivityName=".LecturerView.Activities.LecturerMainActivity" />
         <activity
             android:name=".StudentView.Activities.StudentMainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_student_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".LecturerView.Activities.SessionsActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.SessionsActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Helpers.EventDecorator;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
@@ -83,6 +85,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lecturer_month, container, false);
 
+
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
         selectedDateText = (TextView) view.findViewById(R.id.selectedDateTxt);
 
@@ -107,6 +110,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     try {
                         Date date = dateFormat.parse(lecDateStr);
                         CalendarDay lecDate = CalendarDay.from(date);
+
                         calendarDays.add(lecDate);
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -127,6 +131,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     lectureSessionsList.add(lecSession);
 
                     calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
+
                 }
             }
 
@@ -148,6 +153,13 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
         selectedDateText.setText(getSelectedDateString());
         System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
+
+        Intent intent = new Intent(getActivity(), SessionsActivity.class);
+        Bundle b = new Bundle();
+        b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
+
+        intent.putExtras(b);
+        startActivity(intent);
 
     }
 
@@ -175,9 +187,9 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         return date;
     }
 
-    private List<Session> getLecturesForDate(String lecDate){
+    private ArrayList<Session> getLecturesForDate(String lecDate){
 
-        List<Session> lecs = new ArrayList<>();
+        ArrayList<Session> lecs = new ArrayList<>();
 
         for(Session session  : lectureSessionsList){
 

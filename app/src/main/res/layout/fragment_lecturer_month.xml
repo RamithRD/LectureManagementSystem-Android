@@ -7,18 +7,23 @@
     tools:context="com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerMonthFragment">
 
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mcv_selectionColor="@color/colorPrimary"/>
 
-    <TextView
-        android:id="@+id/selectedDateTxt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Month Fragment"
-        android:layout_marginTop="20dp"
-        android:textAlignment="center"/>
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mcv_selectionColor="@color/colorPrimary"/>
+
+            <TextView
+                android:id="@+id/selectedDateTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Month Fragment"
+                android:layout_marginTop="20dp"
+                android:textAlignment="center"/>
+
+
+
 
 </LinearLayout>
