@@ -357,7 +357,7 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
     private void addLecture() {
 
 
-        String lecDateString = selectedLecDate+" "+"00:00:00";
+        String lecDateString = selectedLecDate+" "+selectedLecStartTime;
         String lecStartString = selectedLecDate+" "+selectedLecStartTime;
         String lecEndString = selectedLecDate+" "+selectedLecEndTime;
 

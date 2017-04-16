@@ -13,6 +13,7 @@ import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Helpers.EventDecorator;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
+import com.example.ramithrd.lecturemanagementsystem.Model.Session;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -47,6 +48,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     private TextView selectedDateText;
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
 
+    private List<Session> lectureSessionsList;
     private List<CalendarDay> calendarDays;
 
     public LecturerMonthFragment() {
@@ -84,6 +86,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
         selectedDateText = (TextView) view.findViewById(R.id.selectedDateTxt);
 
+        lectureSessionsList = new ArrayList<>();
         //dates that needs an event decorator is added to a list
         calendarDays = new ArrayList<>();
 
@@ -97,17 +100,31 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                 for(LectureSession lecture : sessionsList){
 
                     String tempDate = lecture.getSessionDate().replaceAll("\\D+", "");
-                    System.out.println("Lec Dates "+getDate(Long.parseLong(tempDate)/10000));
+                    String lecDateStr = getDate(Long.parseLong(tempDate)/10000);
+                    System.out.println("Lec Dates "+lecDateStr);
 
                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                     try {
-                        Date date = dateFormat.parse(getDate(Long.parseLong(tempDate)/10000));
+                        Date date = dateFormat.parse(lecDateStr);
                         CalendarDay lecDate = CalendarDay.from(date);
                         calendarDays.add(lecDate);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
+                    Session lecSession = new Session();
+                    lecSession.setLecture_Id(lecture.getLecturerId());
+                    lecSession.setBatch_name(lecture.getBatchId());
+                    lecSession.setModule_name(lecture.getModuleName());
+                    lecSession.setUniversity_name(lecture.getUniversityName());
+                    lecSession.setProgramme_name(lecture.getProgrammeName());
+                    lecSession.setLecture_hall(lecture.getLectureHallName());
+                    lecSession.setFaculty(lecture.getFaculty());
+                    lecSession.setLec_date(lecDateStr);
+                    lecSession.setLec_start_time(lecture.getSessionStartTimeText());
+                    lecSession.setLec_end_time(lecture.getSessionEndTimeText());
+
+                    lectureSessionsList.add(lecSession);
 
                     calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
                 }
@@ -129,11 +146,12 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-        selectedDateText.setText(getSelectedDatesString());
+        selectedDateText.setText(getSelectedDateString());
+        System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
 
     }
 
-    private String getSelectedDatesString() {
+    private String getSelectedDateString() {
         CalendarDay date = calendarView.getSelectedDate();
         if (date == null) {
             return "No Selection";
@@ -155,5 +173,20 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         cal.setTimeInMillis(time);
         String date = android.text.format.DateFormat.format("dd-MM-yyyy", cal).toString();
         return date;
+    }
+
+    private List<Session> getLecturesForDate(String lecDate){
+
+        List<Session> lecs = new ArrayList<>();
+
+        for(Session session  : lectureSessionsList){
+
+            if(session.getLec_date().equalsIgnoreCase(lecDate)){
+                lecs.add(session);
+            }
+
+        }
+
+        return lecs;
     }
 }
