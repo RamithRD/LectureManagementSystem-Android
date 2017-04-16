@@ -42,6 +42,9 @@ public interface LectureSessionService {
     @POST("Session")
     Call<Boolean> AddSession(@Body LectureSession lectureSession);
 
+    @GET("Sessions/{lecturerId}")
+    Call<List<LectureSession>> getAllSessions(@Path("lecturerId")String lecturerId);
+
     @GET("DeleteSession/{sessionId}")
     Call<Boolean> cancelSession(@Path("sessionId")String sessionId);
 

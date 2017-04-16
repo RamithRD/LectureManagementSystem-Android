@@ -26,11 +26,6 @@ import com.example.ramithrd.lecturemanagementsystem.Model.University;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -363,10 +358,10 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
 
         String lecDateString = selectedLecDate+" "+"00:00:00";
-        String lecStartString = selectedLecDate+" "+selectedLecStartTime+".000";
-        String lecEndString = selectedLecDate+" "+selectedLecEndTime+".000";
+        String lecStartString = selectedLecDate+" "+selectedLecStartTime;
+        String lecEndString = selectedLecDate+" "+selectedLecEndTime;
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
         Date lecDateTime = new Date();
         Date startDateTime = new Date();
@@ -417,6 +412,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         addLectureSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean b = response.body();
+                System.out.println("REAL val"+b);
                 System.out.println("Success");
             }
 
