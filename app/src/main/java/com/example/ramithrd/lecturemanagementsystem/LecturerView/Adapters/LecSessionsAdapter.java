@@ -38,10 +38,12 @@ public class LecSessionsAdapter extends RecyclerView.Adapter<LecSessionsViewHold
 
         lecSession = sessionsList.get(position);
 
+        holder.moduleIdTxt.setText(lecSession.getModule_Id());
         holder.moduleNameTxt.setText(lecSession.getModule_name());
         holder.startTimeTxt.setText(lecSession.getLec_start_time());
         holder.endTimeTxt.setText(lecSession.getLec_end_time());
-        holder.venueTxt.setText(lecSession.getLecture_hall());
+        String lecVenue = lecSession.getLecture_hall()+" ("+lecSession.getFaculty()+")";
+        holder.venueTxt.setText(lecVenue);
         holder.batchNameTxt.setText(lecSession.getBatch_name());
 
     }

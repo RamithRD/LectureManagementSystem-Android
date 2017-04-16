@@ -375,24 +375,13 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//
-//        TimeZone slTimeZone = TimeZone.getTimeZone("GMT+5:30");
-//
-//        Calendar lecDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
-//        lecDateTimeCal.setTime(lecDateTime); // Where Value is a Date
-//
-//        Calendar startDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
-//
-//        startDateTimeCal.setTime(startDateTime); // Where Value is a Date
-//
-//        Calendar endDateTimeCal = GregorianCalendar.getInstance(slTimeZone);
-//        endDateTimeCal.setTime(endDateTime); // Where Value is a Date
 
         final long lectureDate = lecDateTime.getTime();
         final String lecDate = "/Date("+lectureDate+")/";
 
         final long lectureStartDateTime = startDateTime.getTime();
         final String lecStartDate = "/Date("+lectureStartDateTime+")/";
+
         final long lectureEndDateTime = endDateTime.getTime();
         final String lecEndDate = "/Date("+lectureEndDateTime+")/";
 
@@ -418,6 +407,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                 Boolean b = response.body();
                 System.out.println("REAL val"+b);
                 System.out.println("Success");
+
+                //show success dialog
             }
 
             @Override

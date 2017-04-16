@@ -1,5 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -53,6 +54,8 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     private List<Session> lectureSessionsList;
     private List<CalendarDay> calendarDays;
 
+    private ProgressDialog mProgress;
+
     public LecturerMonthFragment() {
         // Required empty public constructor
     }
@@ -69,6 +72,8 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
         lecturerID  = globalClass.getLecturerID();
+
+        mProgress = new ProgressDialog(getContext());
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
@@ -93,6 +98,8 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         //dates that needs an event decorator is added to a list
         calendarDays = new ArrayList<>();
 
+        mProgress.setMessage("Loading Lecture Sessions ...");
+        mProgress.show();
         Call<List<LectureSession>> getAllSessions = lecSessionService.getAllSessions(lecturerID);
         getAllSessions.enqueue(new Callback<List<LectureSession>>() {
             @Override
@@ -119,6 +126,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     Session lecSession = new Session();
                     lecSession.setLecture_Id(lecture.getLecturerId());
                     lecSession.setBatch_name(lecture.getBatchId());
+                    lecSession.setModule_Id(lecture.getModuleId());
                     lecSession.setModule_name(lecture.getModuleName());
                     lecSession.setUniversity_name(lecture.getUniversityName());
                     lecSession.setProgramme_name(lecture.getProgrammeName());
@@ -133,6 +141,8 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
 
                 }
+
+                mProgress.hide();
             }
 
             @Override
@@ -140,7 +150,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
             }
         });
-
 
         calendarView.setOnDateChangedListener(this);
 
@@ -154,12 +163,20 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         selectedDateText.setText(getSelectedDateString());
         System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
 
-        Intent intent = new Intent(getActivity(), SessionsActivity.class);
-        Bundle b = new Bundle();
-        b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
+        if(getLecturesForDate(getSelectedDateString()).size() > 0){
 
-        intent.putExtras(b);
-        startActivity(intent);
+            Intent intent = new Intent(getActivity(), SessionsActivity.class);
+            Bundle b = new Bundle();
+            b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
+
+            intent.putExtras(b);
+            startActivity(intent);
+
+        }else{
+
+            //show info dialog -  no lecs on this day
+
+        }
 
     }
 

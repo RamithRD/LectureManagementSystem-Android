@@ -10,6 +10,7 @@ import android.os.Parcelable;
 public class Session implements Parcelable {
 
     private String lecture_Id;
+    private String module_Id;
     private String module_name;
     private String batch_name;
     private String university_name;
@@ -26,6 +27,14 @@ public class Session implements Parcelable {
 
     public void setLecture_Id(String lecture_Id) {
         this.lecture_Id = lecture_Id;
+    }
+
+    public String getModule_Id() {
+        return module_Id;
+    }
+
+    public void setModule_Id(String module_Id) {
+        this.module_Id = module_Id;
     }
 
     public String getModule_name() {

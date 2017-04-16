@@ -3,7 +3,6 @@ package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,30 +11,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerTodayFragment;
-import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerWeekFragment;
 import com.example.ramithrd.lecturemanagementsystem.R;
-
-import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LecturerMainActivity extends AppCompatActivity {
 
@@ -124,11 +107,7 @@ public class LecturerMainActivity extends AppCompatActivity {
 
                 return LecturerTodayFragment.newInstance();
 
-            }else if(position == 1){
-
-                return LecturerWeekFragment.newInstance();
-
-            }else{
+            }else {
 
                 return LecturerMonthFragment.newInstance();
 
@@ -137,8 +116,8 @@ public class LecturerMainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
@@ -147,8 +126,6 @@ public class LecturerMainActivity extends AppCompatActivity {
                 case 0:
                     return "TODAY";
                 case 1:
-                    return "THIS WEEK";
-                case 2:
                     return "THIS MONTH";
             }
             return null;
