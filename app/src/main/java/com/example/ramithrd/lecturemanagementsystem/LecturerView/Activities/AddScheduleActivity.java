@@ -95,7 +95,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
     private ProgressDialog mLoadDetailsDialog;
     private Button addLectureSession;
 
-    public static final String ENDPOINT_URL  = "http://54.214.72.150/Service.svc/";
     private LectureSessionService lecSessionService;
 
 
@@ -103,6 +102,8 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_schedule);
+
+        final String ENDPOINT_URL  = getString(R.string.lecturer_service_url);
 
         mLoadDetailsDialog = new ProgressDialog(getApplicationContext());
         addLectureSession = (Button) findViewById(R.id.addLectureSessionBtn);

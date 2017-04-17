@@ -24,6 +24,9 @@ import retrofit2.http.Path;
 
 public interface LectureSessionService {
 
+    @GET("Login/{email}/{password}")
+    Call<String> login(@Path("email")String email, @Path("password")String password);
+
     @GET("Universities/{lecturerId}")
     Call<List<University>> getUniversities(@Path("lecturerId")String lecturerId);
 
