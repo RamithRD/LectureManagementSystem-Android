@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_margin="5dp"
-                app:ms_background_color="#aeafaf"
+                app:ms_background_color="#009688"
                 android:text="Select University"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_margin="5dp"
-                app:ms_background_color="#aeafaf"
+                app:ms_background_color="#009688"
                 android:text="Select Programme"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_margin="5dp"
-                app:ms_background_color="#aeafaf"
+                app:ms_background_color="#009688"
                 android:text="Select Batch"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_margin="5dp"
-                app:ms_background_color="#aeafaf"
+                app:ms_background_color="#009688"
                 android:text="Select Module"/>
 
             <com.jaredrummler.materialspinner.MaterialSpinner
@@ -59,8 +59,14 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_margin="5dp"
-                app:ms_background_color="#aeafaf"
+                app:ms_background_color="#009688"
                 android:text="Select Lecture Hall"/>
+
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0px"
+                android:layout_height="0px"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,7 +111,7 @@
                 android:weightSum="5">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/schedule_time_layout"
+                    android:id="@+id/schedule_start_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -125,7 +131,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/schedule_etime_layout"
+                    android:id="@+id/schedule_end_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"

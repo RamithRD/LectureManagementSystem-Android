@@ -3,8 +3,10 @@ package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +51,10 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
     private ImageButton pickLecTime;
     private ImageButton pickLecDate;
+
+    private TextInputLayout startTimeLayout;
+    private TextInputLayout endTimeLayout;
+    private TextInputLayout dateLayout;
 
     private EditText selectedStartTimeTxt;
     private EditText selectedEndTimeTxt;
@@ -103,12 +109,19 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
         addLectureSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addLecture();
+
+                if(!validateFields()){
+                    addLecture();
+                }
             }
         });
 
         globalClass = ((GlobalClass) getApplicationContext());
         lecturerID =  globalClass.getLecturerID();
+
+        startTimeLayout = (TextInputLayout) findViewById(R.id.schedule_start_time_layout);
+        endTimeLayout = (TextInputLayout) findViewById(R.id.schedule_end_time_layout);
+        dateLayout = (TextInputLayout) findViewById(R.id.schedule_date_layout);
 
         selectedStartTimeTxt = (EditText) findViewById(R.id.schedule_picked_layout);
         selectedEndTimeTxt = (EditText) findViewById(R.id.schedule_end_time);
@@ -204,7 +217,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
                             moduleList.add(module.getName());
                             moduleMap.put(module.getName(),module.getModuleId());
-
                         }
 
                         modulesSpinner.setItems(moduleList);
@@ -260,11 +272,9 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
                     uniList.add(uni.getName());
                     uniMap.put(uni.getName(),uni.getUniversityId());
-
                 }
 
                 universitiesSpinner.setItems(uniList);
-
             }
 
             @Override
@@ -272,8 +282,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
             }
         });
-
-
 
         Call<List<LectureHall>> lecHallRequest = lecSessionService.getLectureHalls();
         lecHallRequest.enqueue(new Callback<List<LectureHall>>() {
@@ -357,7 +365,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
     private void addLecture() {
 
-
         String lecDateString = selectedLecDate+" "+selectedLecStartTime;
         String lecStartString = selectedLecDate+" "+selectedLecStartTime;
         String lecEndString = selectedLecDate+" "+selectedLecEndTime;
@@ -417,8 +424,6 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
             }
         });
 
-
-
     }
 
     @Override
@@ -453,5 +458,79 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                 .addInterceptor(logging)
                 .build();
         return okClient;
+    }
+
+    private boolean validateFields(){
+
+        boolean errorOccurred = false;
+
+        if(TextUtils.isEmpty(selectedUniversityId)){
+            errorOccurred = true;
+            universitiesSpinner.setError("Select a University");
+        }else{
+            errorOccurred = false;
+            universitiesSpinner.setError(null);
+        }
+
+        if(TextUtils.isEmpty(selectedProgrammeId)){
+            errorOccurred = true;
+            programmesSpinner.setError("Select a Programme");
+        }else{
+            errorOccurred = false;
+            programmesSpinner.setError(null);
+        }
+
+        if(TextUtils.isEmpty(selectedModuleId)){
+            errorOccurred = true;
+            modulesSpinner.setError("Select a Module");
+        }else{
+            errorOccurred = false;
+            modulesSpinner.setError(null);
+        }
+
+        if(TextUtils.isEmpty(selectedBatchId)){
+            errorOccurred = true;
+            batchesSpinner.setError("Select a Batch");
+        }else{
+            errorOccurred = false;
+            batchesSpinner.setError(null);
+        }
+
+        if(TextUtils.isEmpty(selectedLecHallId)){
+            errorOccurred = true;
+            lectureHallsSpinner.setError("Select a Lecture Hall");
+        }else{
+            errorOccurred = false;
+            lectureHallsSpinner.setError(null);
+        }
+
+        if(TextUtils.isEmpty(selectedLecDate)){
+            errorOccurred = true;
+            dateLayout.setErrorEnabled(true);
+            dateLayout.setError("Select Lecture Date");
+        }else{
+            errorOccurred = false;
+            dateLayout.setErrorEnabled(false);
+        }
+
+        if(TextUtils.isEmpty(selectedLecStartTime)){
+            errorOccurred = true;
+            startTimeLayout.setErrorEnabled(true);
+            startTimeLayout.setError("Select Lecture Start Time");
+        }else{
+            errorOccurred = false;
+            startTimeLayout.setErrorEnabled(false);
+        }
+
+        if(TextUtils.isEmpty(selectedLecEndTime)){
+            errorOccurred = true;
+            endTimeLayout.setErrorEnabled(true);
+            endTimeLayout.setError("Select Lecture End Time");
+        }else{
+            errorOccurred = false;
+            endTimeLayout.setErrorEnabled(false);
+        }
+
+        return errorOccurred;
     }
 }

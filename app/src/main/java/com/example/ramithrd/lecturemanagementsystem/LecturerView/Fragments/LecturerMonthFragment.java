@@ -41,7 +41,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LecturerMonthFragment extends Fragment implements OnDateSelectedListener {
 
-    public static final String ENDPOINT_URL  = "http://54.214.72.150/Service.svc/";
     private LectureSessionService lecSessionService;
     private String lecturerID= "";
 
@@ -70,6 +69,8 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final String ENDPOINT_URL  = getContext().getString(R.string.lecturer_service_url);
+
         globalClass = ((GlobalClass) getContext().getApplicationContext());
         lecturerID  = globalClass.getLecturerID();
 
@@ -97,6 +98,47 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         lectureSessionsList = new ArrayList<>();
         //dates that needs an event decorator is added to a list
         calendarDays = new ArrayList<>();
+
+        getAllLectureSessions();
+
+        calendarView.setOnDateChangedListener(this);
+
+        return view;
+    }
+
+
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
+        selectedDateText.setText(getSelectedDateString());
+        System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
+
+        if(getLecturesForDate(getSelectedDateString()).size() > 0){
+
+            Intent intent = new Intent(getActivity(), SessionsActivity.class);
+            Bundle b = new Bundle();
+            b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
+
+            intent.putExtras(b);
+            startActivity(intent);
+
+        }else{
+
+            //show info dialog -  no lecs on this day
+
+        }
+
+    }
+
+    private String getSelectedDateString() {
+        CalendarDay date = calendarView.getSelectedDate();
+        if (date == null) {
+            return "No Selection";
+        }
+        return android.text.format.DateFormat.format("dd-MM-yyyy", date.getDate()).toString();
+    }
+
+    private void getAllLectureSessions(){
 
         mProgress.setMessage("Loading Lecture Sessions ...");
         mProgress.show();
@@ -138,7 +180,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     lecSession.setLec_end_time(lecture.getSessionEndTimeText());
 
                     lectureSessionsList.add(lecSession);
-
                     calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
 
                 }
@@ -152,41 +193,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
             }
         });
 
-        calendarView.setOnDateChangedListener(this);
 
-        return view;
-    }
-
-
-    @Override
-    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-
-        selectedDateText.setText(getSelectedDateString());
-        System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
-
-        if(getLecturesForDate(getSelectedDateString()).size() > 0){
-
-            Intent intent = new Intent(getActivity(), SessionsActivity.class);
-            Bundle b = new Bundle();
-            b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
-
-            intent.putExtras(b);
-            startActivity(intent);
-
-        }else{
-
-            //show info dialog -  no lecs on this day
-
-        }
-
-    }
-
-    private String getSelectedDateString() {
-        CalendarDay date = calendarView.getSelectedDate();
-        if (date == null) {
-            return "No Selection";
-        }
-        return android.text.format.DateFormat.format("dd-MM-yyyy", date.getDate()).toString();
     }
 
     private static OkHttpClient getOkHttpClient(){
@@ -218,5 +225,16 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         }
 
         return lecs;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        calendarView.removeDecorators();
+        calendarDays.clear();
+        lectureSessionsList.clear();
+
+        getAllLectureSessions();
     }
 }

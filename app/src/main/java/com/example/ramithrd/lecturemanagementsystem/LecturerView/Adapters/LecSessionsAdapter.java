@@ -27,10 +27,12 @@ public class LecSessionsAdapter extends RecyclerView.Adapter<LecSessionsViewHold
     public LecSessionsAdapter(ArrayList<Session> sessionsList) {
         this.sessionsList = sessionsList;
         mCallback = new OnSessionStateListener() {
+
             @Override
             public void lecSessionCancelled(int position) {
                 removeSessionFromList(position);
             }
+
         };
     }
 

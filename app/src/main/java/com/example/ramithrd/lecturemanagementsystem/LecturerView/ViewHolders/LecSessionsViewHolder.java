@@ -44,7 +44,6 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
     public Button updateLecSession;
     public Button cancelLecSession;
 
-    public static final String ENDPOINT_URL  = "http://54.214.72.150/Service.svc/";
     private LectureSessionService lecSessionService;
     private String lecturerID= "";
 
@@ -58,6 +57,8 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
 
     public LecSessionsViewHolder(View itemView) {
         super(itemView);
+
+        final String ENDPOINT_URL  = itemView.getContext().getString(R.string.lecturer_service_url);
 
         context = itemView.getContext();
 
@@ -85,7 +86,7 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Session sessionData, OnSessionStateListener listener) {
 
-        final Session lecToBeCancelled = sessionData;
+        final Session lecSession = sessionData;
         mListener = listener;
 
         cancelLecSession.setOnClickListener(new View.OnClickListener() {
@@ -93,12 +94,12 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                alertDialog.setTitle("Cancel Lecture For "+lecToBeCancelled.getBatch_name());
+                alertDialog.setTitle("Cancel Lecture For "+lecSession.getBatch_name());
                 alertDialog.setMessage("Please Confirm to Cancel Lecture Session");
                 alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "YES",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                cancelLecture(lecToBeCancelled);
+                                cancelLecture(lecSession);
                                 dialog.dismiss();
                             }
                         });
@@ -111,6 +112,13 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
                         });
                 alertDialog.show();
 
+            }
+        });
+
+        updateLecSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateLecture(lecSession);
             }
         });
 
@@ -141,13 +149,7 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
 
                     cancelProgress.hide();
-
-                    Boolean state = response.body();
-                    if(state){
-                        Toast.makeText(context,"Lecture Cancelled!",Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(context,"Error Occurred! Please Try Again!",Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(context,"Lecture Cancelled!",Toast.LENGTH_LONG).show();
 
                 }
 
@@ -159,6 +161,12 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
             });
 
         }
+
+    }
+
+    private void updateLecture(Session lecSession){
+
+
 
     }
 }

@@ -40,7 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LecturerTodayFragment extends Fragment {
 
-    public static final String ENDPOINT_URL  = "http://54.214.72.150/Service.svc/";
+
     private LectureSessionService lecSessionService;
     private String lecturerID= "";
 
@@ -63,6 +63,8 @@ public class LecturerTodayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final String ENDPOINT_URL  = getContext().getString(R.string.lecturer_service_url);
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
         lecturerID  = globalClass.getLecturerID();
