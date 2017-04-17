@@ -104,6 +104,7 @@ public class LecturerTodayFragment extends Fragment {
                     if(currentDate.equalsIgnoreCase(lecDateStr)){
 
                         Session lecSession = new Session();
+                        lecSession.setSession_Id(lecture.getSessionId());
                         lecSession.setLecture_Id(lecture.getLecturerId());
                         lecSession.setBatch_name(lecture.getBatchId());
                         lecSession.setModule_Id(lecture.getModuleId());

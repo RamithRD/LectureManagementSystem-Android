@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.OnSessionStateListener;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.ViewHolders.LecSessionsViewHolder;
 import com.example.ramithrd.lecturemanagementsystem.Model.Session;
 import com.example.ramithrd.lecturemanagementsystem.R;
@@ -19,10 +20,23 @@ public class LecSessionsAdapter extends RecyclerView.Adapter<LecSessionsViewHold
 
     public ArrayList<Session> sessionsList = new ArrayList<>();
 
+    private OnSessionStateListener mCallback;
+
     private Session lecSession;
 
     public LecSessionsAdapter(ArrayList<Session> sessionsList) {
         this.sessionsList = sessionsList;
+        mCallback = new OnSessionStateListener() {
+            @Override
+            public void lecSessionCancelled(int position) {
+                removeSessionFromList(position);
+            }
+        };
+    }
+
+    private void removeSessionFromList(int position) {
+        sessionsList.remove(position);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -45,6 +59,8 @@ public class LecSessionsAdapter extends RecyclerView.Adapter<LecSessionsViewHold
         String lecVenue = lecSession.getLecture_hall()+" ("+lecSession.getFaculty()+")";
         holder.venueTxt.setText(lecVenue);
         holder.batchNameTxt.setText(lecSession.getBatch_name());
+
+        holder.bind(lecSession,mCallback);
 
     }
 

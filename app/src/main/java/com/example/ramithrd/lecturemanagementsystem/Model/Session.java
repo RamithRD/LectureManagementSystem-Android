@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class Session implements Parcelable {
 
+    private int session_Id;
     private String lecture_Id;
     private String module_Id;
     private String module_name;
@@ -20,6 +21,14 @@ public class Session implements Parcelable {
     private String lec_date;
     private String lec_start_time;
     private String lec_end_time;
+
+    public int getSession_Id() {
+        return session_Id;
+    }
+
+    public void setSession_Id(int session_Id) {
+        this.session_Id = session_Id;
+    }
 
     public String getLecture_Id() {
         return lecture_Id;

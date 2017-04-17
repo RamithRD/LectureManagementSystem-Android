@@ -46,7 +46,7 @@ public interface LectureSessionService {
     Call<List<LectureSession>> getAllSessions(@Path("lecturerId")String lecturerId);
 
     @GET("DeleteSession/{sessionId}")
-    Call<Boolean> cancelSession(@Path("sessionId")String sessionId);
+    Call<Boolean> cancelSession(@Path("sessionId")int sessionId);
 
     @PUT("UpdateSessionDateTime")
     Call<Boolean> updateSessionDateTime(@Body LectureSession lectureSession);
