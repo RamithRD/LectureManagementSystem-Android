@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
+                Intent lectureIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
                 startActivity(lectureIntent);
 
 //                mEmailStr = mEmail.getText().toString();

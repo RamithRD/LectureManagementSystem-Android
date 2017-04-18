@@ -1,8 +1,5 @@
 package com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,23 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
-import com.example.ramithrd.lecturemanagementsystem.Helpers.EventDecorator;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Adapters.LecSessionsAdapter;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
 import com.example.ramithrd.lecturemanagementsystem.Model.Session;
 import com.example.ramithrd.lecturemanagementsystem.R;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -107,7 +98,7 @@ public class LecturerTodayFragment extends Fragment {
 
                         Session lecSession = new Session();
                         lecSession.setSession_Id(lecture.getSessionId());
-                        lecSession.setLecture_Id(lecture.getLecturerId());
+                        lecSession.setLecturer_Id(lecture.getLecturerId());
                         lecSession.setBatch_name(lecture.getBatchId());
                         lecSession.setModule_Id(lecture.getModuleId());
                         lecSession.setModule_name(lecture.getModuleName());
@@ -152,13 +143,12 @@ public class LecturerTodayFragment extends Fragment {
                 .build();
         return okClient;
     }
+
     private String getDate(long time) {
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
         String date = android.text.format.DateFormat.format("dd-MM-yyyy", cal).toString();
         return date;
     }
-
-
 
 }

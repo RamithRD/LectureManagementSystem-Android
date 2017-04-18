@@ -1,4 +1,5 @@
-package com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments;
+package com.example.ramithrd.lecturemanagementsystem.StudentView.Fragments;
+
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,17 +13,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
-import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.SessionsActivity;
-import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Helpers.EventDecorator;
-import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.SessionsActivity;
 import com.example.ramithrd.lecturemanagementsystem.Model.Session;
+import com.example.ramithrd.lecturemanagementsystem.Model.StudentSession;
 import com.example.ramithrd.lecturemanagementsystem.R;
+import com.example.ramithrd.lecturemanagementsystem.StudentView.Activities.StudentsLecActivity;
+import com.example.ramithrd.lecturemanagementsystem.StudentView.Interfaces.StudentService;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,28 +40,27 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LecturerMonthFragment extends Fragment implements OnDateSelectedListener {
 
-    private LectureSessionService lecSessionService;
-    private String lecturerID= "";
+public class StudentMonthFragment extends Fragment implements OnDateSelectedListener {
+
+    private StudentService studentService;
+    private String studentId;
 
     private GlobalClass globalClass;
 
     private MaterialCalendarView calendarView;
-    private TextView selectedDateText;
-    private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
 
     private List<Session> lectureSessionsList;
     private List<CalendarDay> calendarDays;
 
     private ProgressDialog mProgress;
 
-    public LecturerMonthFragment() {
+    public StudentMonthFragment() {
         // Required empty public constructor
     }
 
-    public static LecturerMonthFragment newInstance() {
-        LecturerMonthFragment fragment = new LecturerMonthFragment();
+    public static StudentMonthFragment newInstance() {
+        StudentMonthFragment fragment = new StudentMonthFragment();
 
         return fragment;
     }
@@ -69,12 +69,10 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String ENDPOINT_URL  = getContext().getString(R.string.lecturer_service_url);
+        final String ENDPOINT_URL  = getContext().getString(R.string.student_service_url);
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
-        lecturerID  = globalClass.getLecturerID();
-
-        mProgress = new ProgressDialog(getContext());
+        studentId  = globalClass.getStudentID();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
@@ -82,17 +80,18 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        lecSessionService = retrofit.create(LectureSessionService.class);
+        studentService = retrofit.create(StudentService.class);
 
+        mProgress = new ProgressDialog(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_lecturer_month, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_student_month, container, false);
 
-        calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-        selectedDateText = (TextView) view.findViewById(R.id.selectedDateTxt);
+        calendarView = (MaterialCalendarView) view.findViewById(R.id.stdCalendarView);
 
         lectureSessionsList = new ArrayList<>();
         //dates that needs an event decorator is added to a list
@@ -106,17 +105,24 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     }
 
 
+    private static OkHttpClient getOkHttpClient(){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        OkHttpClient okClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+        return okClient;
+    }
+
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-        selectedDateText.setText(getSelectedDateString());
-        System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
 
         if(getLecturesForDate(getSelectedDateString()).size() > 0){
 
-            Intent intent = new Intent(getActivity(), SessionsActivity.class);
+            Intent intent = new Intent(getActivity(), StudentsLecActivity.class);
             Bundle b = new Bundle();
-            b.putParcelableArrayList("sessionsList",getLecturesForDate(getSelectedDateString()));
+            b.putParcelableArrayList("stdSessionsList",getLecturesForDate(getSelectedDateString()));
 
             intent.putExtras(b);
             startActivity(intent);
@@ -126,7 +132,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
             //show info dialog -  no lecs on this day
 
         }
-
     }
 
     private String getSelectedDateString() {
@@ -134,10 +139,18 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         if (date == null) {
             return "No Selection";
         }
-        return android.text.format.DateFormat.format("dd-MM-yyyy", date.getDate()).toString();
+        return android.text.format.DateFormat.format("MM/dd/yyyy", date.getDate()).toString();
     }
 
-    private void getAllLectureSessions(){
+    private String getDate(long time) {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = android.text.format.DateFormat.format("MM/dd/yyyy", cal).toString();
+        return date;
+    }
+
+
+    private void getAllLectureSessions() {
 
         calendarView.removeDecorators();
         calendarDays.clear();
@@ -145,20 +158,21 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
         mProgress.setMessage("Loading Lecture Sessions ...");
         mProgress.show();
-        Call<List<LectureSession>> getAllSessions = lecSessionService.getAllSessions(lecturerID);
-        getAllSessions.enqueue(new Callback<List<LectureSession>>() {
+
+        Call<List<StudentSession>> getAllSessions = studentService.getLecturesForStudent(studentId);
+        getAllSessions.enqueue(new Callback<List<StudentSession>>() {
             @Override
-            public void onResponse(Call<List<LectureSession>> call, Response<List<LectureSession>> response) {
-                List<LectureSession> sessionsList = response.body();
+            public void onResponse(Call<List<StudentSession>> call, Response<List<StudentSession>> response) {
+                List<StudentSession> sessionsList = response.body();
                 System.out.println("LIST SIZE : "+sessionsList.size());
 
-                for(LectureSession lecture : sessionsList){
+                for(StudentSession lecture : sessionsList){
 
-                    String tempDate = lecture.getSessionDate().replaceAll("\\D+", "");
-                    String lecDateStr = getDate(Long.parseLong(tempDate)/10000);
-                    System.out.println("Lec Dates "+lecDateStr);
+                    //TODO delete 0 and use millis
+                    String lecDateStr = "0"+lecture.getSessionDate();
+                    lecDateStr = lecDateStr.substring(0, lecDateStr.indexOf(" "));
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                     try {
                         Date date = dateFormat.parse(lecDateStr);
                         CalendarDay lecDate = CalendarDay.from(date);
@@ -169,50 +183,30 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     }
 
                     Session lecSession = new Session();
-                    lecSession.setSession_Id(lecture.getSessionId());
-                    lecSession.setLecturer_Id(lecture.getLecturerId());
-                    lecSession.setBatch_name(lecture.getBatchId());
                     lecSession.setModule_Id(lecture.getModuleId());
-                    lecSession.setModule_name(lecture.getModuleName());
-                    lecSession.setUniversity_name(lecture.getUniversityName());
-                    lecSession.setProgramme_name(lecture.getProgrammeName());
-                    lecSession.setLecture_hall(lecture.getLectureHallName());
+                    lecSession.setModule_name(lecture.getName());
+                    lecSession.setLecture_hall(lecture.getHallName());
                     lecSession.setFaculty(lecture.getFaculty());
                     lecSession.setLec_date(lecDateStr);
-                    lecSession.setLec_start_time(lecture.getSessionStartTimeText());
-                    lecSession.setLec_end_time(lecture.getSessionEndTimeText());
+                    lecSession.setLec_start_time(lecture.getSessionST());
+                    lecSession.setLec_end_time(lecture.getSessionET());
 
                     lectureSessionsList.add(lecSession);
                     calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
 
                 }
 
+
                 mProgress.hide();
             }
 
             @Override
-            public void onFailure(Call<List<LectureSession>> call, Throwable t) {
+            public void onFailure(Call<List<StudentSession>> call, Throwable t) {
 
             }
         });
 
 
-    }
-
-    private static OkHttpClient getOkHttpClient(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
-        OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-        return okClient;
-    }
-
-    private String getDate(long time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        String date = android.text.format.DateFormat.format("dd-MM-yyyy", cal).toString();
-        return date;
     }
 
     private ArrayList<Session> getLecturesForDate(String lecDate){
@@ -229,5 +223,4 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
 
         return lecs;
     }
-
 }

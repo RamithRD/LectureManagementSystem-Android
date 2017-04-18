@@ -9,6 +9,7 @@ import android.app.Application;
 public class GlobalClass extends Application {
 
     private String lecturerID;
+    private String studentID;
 
     @Override
     public void onCreate() {
@@ -22,5 +23,13 @@ public class GlobalClass extends Application {
 
     public void setLecturerID(String lecturerID) {
         this.lecturerID = lecturerID;
+    }
+
+    public String getStudentID() {
+        return studentID;
+    }
+
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
     }
 }

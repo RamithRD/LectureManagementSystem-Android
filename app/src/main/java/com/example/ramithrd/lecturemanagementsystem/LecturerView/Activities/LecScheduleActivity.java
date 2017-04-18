@@ -66,11 +66,13 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     private MaterialSpinner modulesSpinner;
     private MaterialSpinner lectureHallsSpinner;
 
-    private List<University> universitiesList;
-    private List<Programme> programmesList;
-    private List<Batch> batchesList;
-    private List<Module> modulesList;
-    private List<LectureHall> lectureHallsList;
+    private List<String> universitiesList;
+    private List<String> progsList;
+    private List<String> batchesList;
+    private List<String> moduleList;
+    private List<String> lectureHallsList;
+
+    private List<LectureHall> lectureHallIds;
 
     private HashMap<String, String> uniMap;
     private HashMap<String, String> programmeMap;
@@ -121,19 +123,6 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         mLoadDetailsDialog = new ProgressDialog(getApplicationContext());
         addLectureSession = (Button) findViewById(R.id.addLectureSessionBtn);
 
-        switch (taskMode){
-
-            case "add":{
-                addLectureSession.setText("Add Schedule");
-                break;
-            }
-            case "update":{
-                addLectureSession.setText("Update Schedule");
-                break;
-            }
-
-
-        }
 
         addLectureSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,16 +183,17 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                     @Override
                     public void onResponse(Call<List<Programme>> call, Response<List<Programme>> response) {
                         List<Programme> programmesList = response.body();
-                        List<String> progList = new ArrayList<String>();
-                        progList.add("Select Programme");
+                        progsList = new ArrayList<String>();
+                        progsList.add("Select Programme");
 
                         for(Programme prog : programmesList){
 
-                            progList.add(prog.getName());
+                            progsList.add(prog.getName());
                             programmeMap.put(prog.getName(),prog.getProgrammeId());
 
                         }
-                        programmesSpinner.setItems(progList);
+
+                        programmesSpinner.setItems(progsList);
                     }
 
                     @Override
@@ -227,16 +217,17 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                     public void onResponse(Call<List<Batch>> call, Response<List<Batch>> response) {
                         List<Batch> batchessList = response.body();
 
-                        List<String> batchList = new ArrayList<String>();
-                        batchList.add("Select Batch");
+                        batchesList = new ArrayList<String>();
+                        batchesList.add("Select Batch");
 
                         for(Batch batch: batchessList){
 
-                            batchList.add(batch.getBatchId());
+                            batchesList.add(batch.getBatchId());
 
                         }
 
-                        batchesSpinner.setItems(batchList);
+
+                        batchesSpinner.setItems(batchesList);
                     }
 
                     @Override
@@ -251,7 +242,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                     public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
                         List<Module> modulesList = response.body();
 
-                        List<String> moduleList = new ArrayList<String>();
+                        moduleList = new ArrayList<String>();
                         moduleList.add("Select Module");
 
                         for(Module module: modulesList){
@@ -259,6 +250,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                             moduleList.add(module.getName());
                             moduleMap.put(module.getName(),module.getModuleId());
                         }
+
 
                         modulesSpinner.setItems(moduleList);
                     }
@@ -293,7 +285,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 selectedLecHallId = item.toString();
-                lecFaculty = lectureHallsList.get(position).getFaculty();
+                lecFaculty = lectureHallIds.get(position).getFaculty();
                 System.out.println("I2K Lec-Hall :"+selectedLecHallId);
             }
         });
@@ -306,16 +298,17 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
                 List<University> universityList = response.body();
 
-                List<String> uniList = new ArrayList<String>();
-                uniList.add("Select University");
+                universitiesList = new ArrayList<String>();
+                universitiesList.add("Select University");
 
                 for(University uni : universityList){
 
-                    uniList.add(uni.getName());
+                    universitiesList.add(uni.getName());
                     uniMap.put(uni.getName(),uni.getUniversityId());
                 }
 
-                universitiesSpinner.setItems(uniList);
+
+                universitiesSpinner.setItems(universitiesList);
             }
 
             @Override
@@ -330,18 +323,19 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             public void onResponse(Call<List<LectureHall>> call, Response<List<LectureHall>> response) {
                 System.out.println("SUCCESS");
 
-                lectureHallsList = response.body();
+                lectureHallIds = response.body();
 
-                List<String> hallNamesList = new ArrayList<String>();
+                lectureHallsList = new ArrayList<String>();
 
-                for(LectureHall lec : lectureHallsList){
+                for(LectureHall lec : lectureHallIds){
 
                     //get faculty
-                    hallNamesList.add(lec.getLectureHallName());
+                    lectureHallsList.add(lec.getLectureHallName());
 
                 }
 
-                lectureHallsSpinner.setItems(hallNamesList);
+
+                lectureHallsSpinner.setItems(lectureHallsList);
 
             }
 
@@ -402,6 +396,22 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
             }
         });
+
+
+        switch (taskMode){
+
+            case "add":{
+                addLectureSession.setText("Add Schedule");
+                break;
+            }
+            case "update":{
+                addLectureSession.setText("Update Schedule");
+                setSessionDetails();
+                break;
+            }
+
+
+        }
     }
 
     private void addLecture() {
@@ -544,10 +554,6 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
     }
 
-    private void prePostPrep(){
-
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -580,6 +586,21 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                 .addInterceptor(logging)
                 .build();
         return okClient;
+    }
+
+    private void setSessionDetails(){
+
+        //remove the date from start and end times
+        String startTimefull = sessionToUpdate.getLec_start_time();
+        String endTimeFull = sessionToUpdate.getLec_end_time();
+
+        String[] startTimeArr = startTimefull.split(" ");
+        String[] endTimeArr = endTimeFull.split(" ");
+
+        selectedStartTimeTxt.setText(startTimeArr[1]);
+        selectedEndTimeTxt.setText(endTimeArr[1]);
+        selectedDateTxt.setText(sessionToUpdate.getLec_date());
+
     }
 
     private boolean validateFields(){
