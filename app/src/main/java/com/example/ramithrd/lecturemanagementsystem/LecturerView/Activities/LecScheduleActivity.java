@@ -24,6 +24,7 @@ import com.example.ramithrd.lecturemanagementsystem.Model.LectureHall;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
 import com.example.ramithrd.lecturemanagementsystem.Model.Module;
 import com.example.ramithrd.lecturemanagementsystem.Model.Programme;
+import com.example.ramithrd.lecturemanagementsystem.Model.Session;
 import com.example.ramithrd.lecturemanagementsystem.Model.University;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -33,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -47,7 +47,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddScheduleActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class LecScheduleActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private ImageButton pickLecTime;
     private ImageButton pickLecDate;
@@ -97,22 +97,62 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
     private LectureSessionService lecSessionService;
 
+    private String taskMode = "";
+    private Session sessionToUpdate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_schedule);
+        setContentView(R.layout.activity_lec_schedule);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+
+            sessionToUpdate = extras.getParcelable("sessionToUpdate");
+            taskMode = "update";
+
+        }else{
+            taskMode = "add";
+        }
 
         final String ENDPOINT_URL  = getString(R.string.lecturer_service_url);
 
         mLoadDetailsDialog = new ProgressDialog(getApplicationContext());
         addLectureSession = (Button) findViewById(R.id.addLectureSessionBtn);
+
+        switch (taskMode){
+
+            case "add":{
+                addLectureSession.setText("Add Schedule");
+                break;
+            }
+            case "update":{
+                addLectureSession.setText("Update Schedule");
+                break;
+            }
+
+
+        }
+
         addLectureSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(!validateFields()){
-                    addLecture();
+
+                    switch (taskMode){
+
+                        case "add":{
+                            addLecture();
+                            break;
+                        }
+                        case "update":{
+                            updateLecture(sessionToUpdate);
+                            break;
+                        }
+
+                    }
                 }
             }
         });
@@ -318,7 +358,7 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
 
                 Calendar now = Calendar.getInstance();
                 TimePickerDialog timePicker = TimePickerDialog.newInstance(
-                        AddScheduleActivity.this,
+                        LecScheduleActivity.this,
                         now.get(Calendar.HOUR_OF_DAY),
                         now.get(Calendar.MINUTE),
                         false
@@ -345,7 +385,7 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                 mMonth = calendar.get(Calendar.MONTH);
                 mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePicker = new DatePickerDialog(AddScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(LecScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -424,6 +464,87 @@ public class AddScheduleActivity extends AppCompatActivity implements TimePicker
                 System.out.println("Failure "+t.getMessage());
             }
         });
+
+    }
+
+    private void updateLecture(Session session){
+
+        String lecDateString = selectedLecDate+" "+selectedLecStartTime;
+        String lecStartString = selectedLecDate+" "+selectedLecStartTime;
+        String lecEndString = selectedLecDate+" "+selectedLecEndTime;
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date lecDateTime = new Date();
+        Date startDateTime = new Date();
+        Date endDateTime = new Date();
+        try {
+            lecDateTime = dateFormat.parse(lecDateString);
+            startDateTime = dateFormat.parse(lecStartString);
+            endDateTime = dateFormat.parse(lecEndString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        final long lectureDate = lecDateTime.getTime();
+        final String lecDate = "/Date("+lectureDate+")/";
+
+        final long lectureStartDateTime = startDateTime.getTime();
+        final String lecStartDate = "/Date("+lectureStartDateTime+")/";
+
+        final long lectureEndDateTime = endDateTime.getTime();
+        final String lecEndDate = "/Date("+lectureEndDateTime+")/";
+
+        LectureSession lecSession = new LectureSession();
+        lecSession.setSessionId(session.getSession_Id());
+        lecSession.setUserId(lecturerID);
+        lecSession.setLecturerId(lecturerID);
+        lecSession.setBatchId(selectedBatchId);
+        lecSession.setModuleId(selectedModuleId);
+        lecSession.setUniversityId(selectedUniversityId);
+        lecSession.setProgrammeId(selectedProgrammeId);
+        lecSession.setLectureHallName(selectedLecHallId);
+        lecSession.setFaculty(lecFaculty);
+        lecSession.setSessionStartTime(lecStartDate);
+        lecSession.setSessionEndTime(lecEndDate);
+        lecSession.setSessionDate(lecDate);
+
+        System.out.println("Session ID : "+session.getSession_Id());
+
+        Call<Boolean> updateSession = lecSessionService.updateSession(lecSession);
+        updateSession.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean b = response.body();
+                System.out.println("REAL val"+b);
+                System.out.println("Success");
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                System.out.println("Failure "+t.getMessage());
+            }
+        });
+
+        Call<Boolean> updateSessionTimes = lecSessionService.updateSessionDateTime(lecSession);
+        updateSessionTimes.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Boolean b = response.body();
+                System.out.println("REAL val"+b);
+                System.out.println("Success : times updated");
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void prePostPrep(){
 
     }
 

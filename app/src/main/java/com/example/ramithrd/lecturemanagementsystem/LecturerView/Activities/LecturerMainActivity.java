@@ -57,7 +57,7 @@ public class LecturerMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent addScheduleIntent = new Intent(LecturerMainActivity.this, AddScheduleActivity.class);
+                Intent addScheduleIntent = new Intent(LecturerMainActivity.this, LecScheduleActivity.class);
                 startActivity(addScheduleIntent);
 
             }

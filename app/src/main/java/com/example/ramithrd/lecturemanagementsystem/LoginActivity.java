@@ -60,51 +60,54 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mEmailStr = mEmail.getText().toString();
-                mPasswordStr = mPassword.getText().toString();
+                Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
+                startActivity(lectureIntent);
 
-                String passHashed = new String(Hex.encodeHex(DigestUtils.sha1(mPasswordStr)));
-
-                Call<String> login = lecSessionService.login(mEmailStr,passHashed);
-                login.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        System.out.println("User Details "+response.body());
-
-                        String responseBody = "";
-                        responseBody = response.body();
-
-                        if(responseBody.equals("")){
-                            //handle login error
-                        }else{
-
-                            String[] loginInfo = responseBody.split("\\-");
-
-                            switch(loginInfo[0]){
-
-                                case "student":{
-                                    Intent studentIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
-                                    startActivity(studentIntent);
-                                    break;
-                                }
-
-                                case "lecturer":{
-                                    Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
-                                    startActivity(lectureIntent);
-                                    break;
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                    }
-                });
+//                mEmailStr = mEmail.getText().toString();
+//                mPasswordStr = mPassword.getText().toString();
+//
+//                String passHashed = new String(Hex.encodeHex(DigestUtils.sha1(mPasswordStr)));
+//
+//                Call<String> login = lecSessionService.login(mEmailStr,passHashed);
+//                login.enqueue(new Callback<String>() {
+//                    @Override
+//                    public void onResponse(Call<String> call, Response<String> response) {
+//                        System.out.println("User Details "+response.body());
+//
+//                        String responseBody = "";
+//                        responseBody = response.body();
+//
+//                        if(responseBody.equals("")){
+//                            //handle login error
+//                        }else{
+//
+//                            String[] loginInfo = responseBody.split("\\-");
+//
+//                            switch(loginInfo[0]){
+//
+//                                case "student":{
+//                                    Intent studentIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
+//                                    startActivity(studentIntent);
+//                                    break;
+//                                }
+//
+//                                case "lecturer":{
+//                                    Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
+//                                    startActivity(lectureIntent);
+//                                    break;
+//                                }
+//
+//                            }
+//
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<String> call, Throwable t) {
+//
+//                    }
+//                });
 
             }
         });

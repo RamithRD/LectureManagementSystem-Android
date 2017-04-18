@@ -3,6 +3,8 @@ package com.example.ramithrd.lecturemanagementsystem.LecturerView.ViewHolders;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.ContentFrameLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecScheduleActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.OnSessionStateListener;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
@@ -166,7 +169,11 @@ public class LecSessionsViewHolder extends RecyclerView.ViewHolder {
 
     private void updateLecture(Session lecSession){
 
-
+        Intent updateIntent = new Intent(context.getApplicationContext(), LecScheduleActivity.class);
+        //calling startActivity() from outside of an Activity context requires the FLAG_ACTIVITY_NEW_TASK flag
+        updateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        updateIntent.putExtra("sessionToUpdate",lecSession);
+        context.getApplicationContext().startActivity(updateIntent);
 
     }
 }

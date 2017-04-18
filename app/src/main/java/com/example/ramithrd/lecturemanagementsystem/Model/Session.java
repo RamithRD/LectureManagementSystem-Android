@@ -125,7 +125,9 @@ public class Session implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.session_Id);
         dest.writeString(this.lecture_Id);
+        dest.writeString(this.module_Id);
         dest.writeString(this.module_name);
         dest.writeString(this.batch_name);
         dest.writeString(this.university_name);
@@ -141,7 +143,9 @@ public class Session implements Parcelable {
     }
 
     protected Session(Parcel in) {
+        this.session_Id = in.readInt();
         this.lecture_Id = in.readString();
+        this.module_Id = in.readString();
         this.module_name = in.readString();
         this.batch_name = in.readString();
         this.university_name = in.readString();
