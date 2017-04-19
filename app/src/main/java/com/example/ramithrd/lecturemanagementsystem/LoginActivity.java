@@ -10,6 +10,7 @@ import android.widget.Switch;
 
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecturerMainActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
+import com.example.ramithrd.lecturemanagementsystem.Model.User;
 import com.example.ramithrd.lecturemanagementsystem.StudentView.Activities.StudentMainActivity;
 
 import org.apache.commons.codec.binary.Hex;
@@ -60,54 +61,66 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent lectureIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
-                startActivity(lectureIntent);
 
-//                mEmailStr = mEmail.getText().toString();
-//                mPasswordStr = mPassword.getText().toString();
-//
+                mEmailStr = mEmail.getText().toString();
+                mPasswordStr = mPassword.getText().toString();
+
+//                //TODO use the hashed password for final
 //                String passHashed = new String(Hex.encodeHex(DigestUtils.sha1(mPasswordStr)));
-//
-//                Call<String> login = lecSessionService.login(mEmailStr,passHashed);
-//                login.enqueue(new Callback<String>() {
-//                    @Override
-//                    public void onResponse(Call<String> call, Response<String> response) {
-//                        System.out.println("User Details "+response.body());
-//
-//                        String responseBody = "";
-//                        responseBody = response.body();
-//
-//                        if(responseBody.equals("")){
-//                            //handle login error
-//                        }else{
-//
-//                            String[] loginInfo = responseBody.split("\\-");
-//
-//                            switch(loginInfo[0]){
-//
-//                                case "student":{
-//                                    Intent studentIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
-//                                    startActivity(studentIntent);
-//                                    break;
-//                                }
-//
-//                                case "lecturer":{
-//                                    Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
-//                                    startActivity(lectureIntent);
-//                                    break;
-//                                }
-//
-//                            }
-//
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<String> call, Throwable t) {
-//
-//                    }
-//                });
+
+                Call<String> login = lecSessionService.login(mEmailStr,mPasswordStr);
+                login.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        System.out.println("User Details "+response.body());
+
+                        String responseBody = "";
+                        responseBody = response.body();
+
+                        if(responseBody.equals("")){
+                            //handle login error
+                        }else{
+
+                            String[] loginInfo = responseBody.split("\\-");
+
+                            User user = new User();
+                            user.setUser_role(loginInfo[0]);
+                            user.setUserId(loginInfo[1]);
+                            user.setFirst_name(loginInfo[2]);
+                            user.setLast_name(loginInfo[3]);
+
+                            switch(user.getUser_role()){
+
+
+
+                                case "student":{
+                                    Intent studentIntent = new Intent(LoginActivity.this, StudentMainActivity.class);
+                                    studentIntent.putExtra("userDetails",user);
+                                    studentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    System.out.println("USER DETAILS "+user.getUserId()+" "+user.getUser_role()+" "+user.getFirst_name());
+                                    startActivity(studentIntent);
+                                    break;
+                                }
+
+                                case "lecturer":{
+                                    Intent lectureIntent = new Intent(LoginActivity.this, LecturerMainActivity.class);
+                                    lectureIntent.putExtra("userDetails",user);
+                                    lectureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(lectureIntent);
+                                    break;
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
 
             }
         });

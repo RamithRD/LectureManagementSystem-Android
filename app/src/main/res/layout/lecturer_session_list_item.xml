@@ -128,14 +128,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Update Lecture"/>
+                    android:text="Update Lecture"
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <Button
                     android:id="@+id/cancel_lec_btn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Cancel Lecture"/>
+                    android:text="Cancel Lecture"
+                    android:textColor="#C2185B"/>
 
             </LinearLayout>
 

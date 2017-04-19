@@ -24,7 +24,6 @@ public class StdSessionsViewHolder extends RecyclerView.ViewHolder {
     public TextView startTimeTxt;
     public TextView endTimeTxt;
     public TextView venueTxt;
-    public TextView lecturerTxt;
 
     private Context context;
 
@@ -38,7 +37,6 @@ public class StdSessionsViewHolder extends RecyclerView.ViewHolder {
         startTimeTxt = (TextView) itemView.findViewById(R.id.std_start_time_txt);
         endTimeTxt = (TextView) itemView.findViewById(R.id.std_end_time_txt);
         venueTxt = (TextView) itemView.findViewById(R.id.std_venue_txt);
-        lecturerTxt = (TextView) itemView.findViewById(R.id.std_lecturer_txt);
 
     }
 

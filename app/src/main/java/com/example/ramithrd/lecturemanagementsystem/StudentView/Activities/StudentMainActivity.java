@@ -23,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
+import com.example.ramithrd.lecturemanagementsystem.LoginActivity;
 import com.example.ramithrd.lecturemanagementsystem.Model.LecAttendance;
+import com.example.ramithrd.lecturemanagementsystem.Model.User;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.example.ramithrd.lecturemanagementsystem.StudentView.Fragments.StudentMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.StudentView.Fragments.StudentTodayFragment;
@@ -58,9 +60,11 @@ public class StudentMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
+        User userInfo = getIntent().getExtras().getParcelable("userDetails");
+
         globalClass = ((GlobalClass) getApplicationContext());
-        //set id of lecturere after logging in
-        globalClass.setStudentID("10541959");
+        //set id of lecturer after logging in
+        globalClass.setStudentID(userInfo.getUserId());
 
         final String ENDPOINT_URL  = getString(R.string.student_service_url);
 
@@ -78,7 +82,9 @@ public class StudentMainActivity extends AppCompatActivity {
         mAttendanceProgress = new ProgressDialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Hello, "+userInfo.getFirst_name()+"!");
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -89,15 +95,6 @@ public class StudentMainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
     }
 
@@ -117,8 +114,10 @@ public class StudentMainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_sign_out) {
+            Intent loginIntent = new Intent(StudentMainActivity.this, LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(loginIntent);
         }
 
         if(id == R.id.action_scan_attendance){
@@ -227,7 +226,7 @@ public class StudentMainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "TODAY";
+                    return "TODAY'S LECTURES";
                 case 1:
                     return "THIS MONTH";
             }

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textColorHint="@color/colorPrimaryDark"
                 android:textColorLink="@color/colorPrimaryDark"
                 android:textSize="20sp" />
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textColorHint="@color/colorPrimaryDark"
                 android:textColorLink="@color/colorPrimaryDark"
                 android:textSize="20sp" />

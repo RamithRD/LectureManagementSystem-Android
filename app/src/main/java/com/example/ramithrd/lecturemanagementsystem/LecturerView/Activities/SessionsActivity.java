@@ -25,7 +25,7 @@ public class SessionsActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Lectures on "+sessionsList.get(0).getLec_date());
 
-        recyclerView = (RecyclerView) findViewById(R.id.lec_sessions_month_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.lec_sessions_recycler);
         recyclerView.setNestedScrollingEnabled(false);
         sessionsAdapter = new LecSessionsAdapter(sessionsList);
 

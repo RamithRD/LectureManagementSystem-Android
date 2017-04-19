@@ -41,7 +41,6 @@ public class StdSessionsAdapter extends RecyclerView.Adapter<StdSessionsViewHold
 
         holder.moduleIdTxt.setText(lecSession.getModule_Id());
         holder.moduleNameTxt.setText(lecSession.getModule_name());
-        holder.lecturerTxt.setText(lecSession.getLecturer_name());
         holder.startTimeTxt.setText(lecSession.getLec_start_time());
         holder.endTimeTxt.setText(lecSession.getLec_end_time());
 

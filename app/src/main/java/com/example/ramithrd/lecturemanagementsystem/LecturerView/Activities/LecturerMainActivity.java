@@ -18,7 +18,10 @@ import android.view.View;
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerTodayFragment;
+import com.example.ramithrd.lecturemanagementsystem.LoginActivity;
+import com.example.ramithrd.lecturemanagementsystem.Model.User;
 import com.example.ramithrd.lecturemanagementsystem.R;
+import com.example.ramithrd.lecturemanagementsystem.StudentView.Activities.StudentMainActivity;
 
 public class LecturerMainActivity extends AppCompatActivity {
 
@@ -35,12 +38,16 @@ public class LecturerMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecturer_main);
 
+        User userInfo = getIntent().getExtras().getParcelable("userDetails");
+
         globalClass = ((GlobalClass) getApplicationContext());
         //set id of lecturere after logging in
-        globalClass.setLecturerID("10410149");
+        globalClass.setLecturerID(userInfo.getUserId());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Hello, "+userInfo.getFirst_name()+"!");
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -82,8 +89,10 @@ public class LecturerMainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_sign_out) {
+            Intent loginIntent = new Intent(LecturerMainActivity.this, LoginActivity.class);
+            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(loginIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -124,7 +133,7 @@ public class LecturerMainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "TODAY";
+                    return "TODAY'S LECTURES";
                 case 1:
                     return "THIS MONTH";
             }

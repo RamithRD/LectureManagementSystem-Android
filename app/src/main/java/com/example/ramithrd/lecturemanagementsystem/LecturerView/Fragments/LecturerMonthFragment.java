@@ -47,7 +47,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     private GlobalClass globalClass;
 
     private MaterialCalendarView calendarView;
-    private TextView selectedDateText;
     private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
 
     private List<Session> lectureSessionsList;
@@ -92,7 +91,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         View view = inflater.inflate(R.layout.fragment_lecturer_month, container, false);
 
         calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
-        selectedDateText = (TextView) view.findViewById(R.id.selectedDateTxt);
 
         lectureSessionsList = new ArrayList<>();
         //dates that needs an event decorator is added to a list
@@ -109,7 +107,6 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-        selectedDateText.setText(getSelectedDateString());
         System.out.println("Lec Size "+getLecturesForDate(getSelectedDateString()).size());
 
         if(getLecturesForDate(getSelectedDateString()).size() > 0){
@@ -183,7 +180,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
                     lecSession.setLec_end_time(lecture.getSessionEndTimeText());
 
                     lectureSessionsList.add(lecSession);
-                    calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
+                    calendarView.addDecorator(new EventDecorator(Color.parseColor("#009688"),calendarDays));
 
                 }
 

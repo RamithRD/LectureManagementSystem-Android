@@ -185,7 +185,7 @@ public class StudentMonthFragment extends Fragment implements OnDateSelectedList
                     lecSession.setLec_end_time(lecture.getSessionET());
 
                     lectureSessionsList.add(lecSession);
-                    calendarView.addDecorator(new EventDecorator(Color.RED,calendarDays));
+                    calendarView.addDecorator(new EventDecorator(Color.parseColor("#009688"),calendarDays));
 
                 }
 
