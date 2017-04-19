@@ -1,5 +1,6 @@
 package com.example.ramithrd.lecturemanagementsystem.StudentView.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,11 +23,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
+import com.example.ramithrd.lecturemanagementsystem.Model.LecAttendance;
 import com.example.ramithrd.lecturemanagementsystem.R;
 import com.example.ramithrd.lecturemanagementsystem.StudentView.Fragments.StudentMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.StudentView.Fragments.StudentTodayFragment;
+import com.example.ramithrd.lecturemanagementsystem.StudentView.Interfaces.StudentService;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static java.security.AccessController.getContext;
 
 public class StudentMainActivity extends AppCompatActivity {
 
@@ -34,14 +47,35 @@ public class StudentMainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
+    private GlobalClass globalClass;
+
+    private StudentService studentService;
+    private String studentId;
+    private ProgressDialog mAttendanceProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
-        GlobalClass globalClass = ((GlobalClass) getApplicationContext());
+        globalClass = ((GlobalClass) getApplicationContext());
         //set id of lecturere after logging in
         globalClass.setStudentID("10541959");
+
+        final String ENDPOINT_URL  = getString(R.string.student_service_url);
+
+        globalClass = ((GlobalClass) getApplicationContext());
+        studentId  = globalClass.getStudentID();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ENDPOINT_URL)
+                .client(getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        studentService = retrofit.create(StudentService.class);
+
+        mAttendanceProgress = new ProgressDialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,7 +128,8 @@ public class StudentMainActivity extends AppCompatActivity {
             integrator.setPrompt("Scan Qr code to mark attendance");
             integrator.setBeepEnabled(false);
             integrator.setBarcodeImageEnabled(true);
-            integrator.setOrientationLocked(false);
+            integrator.setOrientationLocked(true);
+            integrator.setCaptureActivity(QrCaptureActivityPortrait.class);
             integrator.initiateScan();
 
         }
@@ -115,9 +150,40 @@ public class StudentMainActivity extends AppCompatActivity {
 
             } else {
 
-                String sessionIDStr = result.getContents();
-                Toast.makeText(this, sessionIDStr, Toast.LENGTH_LONG).show();
+                mAttendanceProgress.setMessage("Marking Attendance ...");
+                mAttendanceProgress.show();
+                mAttendanceProgress.setCancelable(false);
 
+                String sessionIDStr = result.getContents();
+                if(sessionIDStr.contains("att-")){
+
+                    String[] sessionId = sessionIDStr.split("-");
+
+                    LecAttendance attendance = new LecAttendance();
+                    attendance.setSession_Id(sessionId[1]);
+                    attendance.setSession_Id(globalClass.getStudentID());
+                    attendance.setStudent_Id(globalClass.getStudentID());
+
+                    Call<Boolean> sendAttendance = studentService.addAttendance(attendance);
+                    sendAttendance.enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+
+                            mAttendanceProgress.hide();
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+
+                        }
+                    });
+
+                    Toast.makeText(this, sessionIDStr, Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(this,"Invalid Qr Code Scan!", Toast.LENGTH_LONG).show();
+                }
 
             }
 
@@ -167,5 +233,14 @@ public class StudentMainActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+
+    private static OkHttpClient getOkHttpClient(){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        OkHttpClient okClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+        return okClient;
     }
 }

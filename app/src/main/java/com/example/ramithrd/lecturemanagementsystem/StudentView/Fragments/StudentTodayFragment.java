@@ -94,16 +94,16 @@ public class StudentTodayFragment extends Fragment {
             public void onResponse(Call<List<StudentSession>> call, Response<List<StudentSession>> response) {
 
                 List<StudentSession> sessionsTdy = response.body();
-                String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
+                String currentDate = new SimpleDateFormat("M/dd/yyyy").format(Calendar.getInstance().getTime());
                 System.out.println("CURRENT DATE "+currentDate);
 
                 for(StudentSession lecture : sessionsTdy){
 
                     //TODO delete 0 and use millis
-                    String lecDateStr = "0"+lecture.getSessionDate();
+                    String lecDateStr = lecture.getSessionDate();
                     lecDateStr = lecDateStr.substring(0, lecDateStr.indexOf(" "));
 
-                    System.out.println("DATE "+lecDateStr);
+                    System.out.println("DATE "+lecture.getSessionDate());
 
                     if(currentDate.equalsIgnoreCase(lecDateStr)){
 

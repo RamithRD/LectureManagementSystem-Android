@@ -22,6 +22,6 @@ public interface StudentService {
     Call<List<StudentSession>> getLecturesForStudent(@Path("id")String studentId);
 
     @POST("Attendance")
-    Call<Boolean> AddSession(@Body LecAttendance attendance);
+    Call<Boolean> addAttendance(@Body LecAttendance attendance);
 
 }

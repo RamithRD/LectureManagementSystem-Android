@@ -21,4 +21,27 @@ public class LecAttendance {
     @Expose
     private String Session_Id;
 
+    public String getUser_Id() {
+        return User_Id;
+    }
+
+    public void setUser_Id(String user_Id) {
+        User_Id = user_Id;
+    }
+
+    public String getStudent_Id() {
+        return Student_Id;
+    }
+
+    public void setStudent_Id(String student_Id) {
+        Student_Id = student_Id;
+    }
+
+    public String getSession_Id() {
+        return Session_Id;
+    }
+
+    public void setSession_Id(String session_Id) {
+        Session_Id = session_Id;
+    }
 }

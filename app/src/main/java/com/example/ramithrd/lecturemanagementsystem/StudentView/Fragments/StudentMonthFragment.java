@@ -139,16 +139,8 @@ public class StudentMonthFragment extends Fragment implements OnDateSelectedList
         if (date == null) {
             return "No Selection";
         }
-        return android.text.format.DateFormat.format("MM/dd/yyyy", date.getDate()).toString();
+        return android.text.format.DateFormat.format("M/dd/yyyy", date.getDate()).toString();
     }
-
-    private String getDate(long time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        String date = android.text.format.DateFormat.format("MM/dd/yyyy", cal).toString();
-        return date;
-    }
-
 
     private void getAllLectureSessions() {
 
@@ -168,11 +160,12 @@ public class StudentMonthFragment extends Fragment implements OnDateSelectedList
 
                 for(StudentSession lecture : sessionsList){
 
-                    //TODO delete 0 and use millis
-                    String lecDateStr = "0"+lecture.getSessionDate();
+
+                    String lecDateStr = lecture.getSessionDate();
                     lecDateStr = lecDateStr.substring(0, lecDateStr.indexOf(" "));
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("M/dd/yyyy");
                     try {
                         Date date = dateFormat.parse(lecDateStr);
                         CalendarDay lecDate = CalendarDay.from(date);
