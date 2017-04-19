@@ -71,7 +71,7 @@ public class LecturerMonthFragment extends Fragment implements OnDateSelectedLis
         final String ENDPOINT_URL  = getContext().getString(R.string.lecturer_service_url);
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
-        lecturerID  = globalClass.getLecturerID();
+        lecturerID  = globalClass.getUserInfo().getUserId();
 
         mProgress = new ProgressDialog(getContext());
 

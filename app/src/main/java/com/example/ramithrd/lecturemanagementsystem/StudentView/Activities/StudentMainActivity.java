@@ -52,7 +52,6 @@ public class StudentMainActivity extends AppCompatActivity {
     private GlobalClass globalClass;
 
     private StudentService studentService;
-    private String studentId;
     private ProgressDialog mAttendanceProgress;
 
     @Override
@@ -60,16 +59,19 @@ public class StudentMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
 
-        User userInfo = getIntent().getExtras().getParcelable("userDetails");
-
         globalClass = ((GlobalClass) getApplicationContext());
-        //set id of lecturer after logging in
-        globalClass.setStudentID(userInfo.getUserId());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("userDetails")) {
+                User userInfo = extras.getParcelable("userDetails");
+                globalClass.setUserInfo(userInfo);
+            }
+        }
+
 
         final String ENDPOINT_URL  = getString(R.string.student_service_url);
 
-        globalClass = ((GlobalClass) getApplicationContext());
-        studentId  = globalClass.getStudentID();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)
@@ -82,7 +84,7 @@ public class StudentMainActivity extends AppCompatActivity {
         mAttendanceProgress = new ProgressDialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Hello, "+userInfo.getFirst_name()+"!");
+        toolbar.setTitle("Hello, "+globalClass.getUserInfo().getFirst_name()+"!");
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
@@ -160,8 +162,8 @@ public class StudentMainActivity extends AppCompatActivity {
 
                     LecAttendance attendance = new LecAttendance();
                     attendance.setSession_Id(sessionId[1]);
-                    attendance.setSession_Id(globalClass.getStudentID());
-                    attendance.setStudent_Id(globalClass.getStudentID());
+                    attendance.setSession_Id(globalClass.getUserInfo().getUserId());
+                    attendance.setStudent_Id(globalClass.getUserInfo().getUserId());
 
                     Call<Boolean> sendAttendance = studentService.addAttendance(attendance);
                     sendAttendance.enqueue(new Callback<Boolean>() {

@@ -67,7 +67,7 @@ public class StudentTodayFragment extends Fragment {
         studentSessionsList = new ArrayList<>();
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
-        studentId  = globalClass.getStudentID();
+        studentId  = globalClass.getUserInfo().getUserId();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)

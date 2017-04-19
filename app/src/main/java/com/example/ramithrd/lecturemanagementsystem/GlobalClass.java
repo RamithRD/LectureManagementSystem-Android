@@ -2,14 +2,15 @@ package com.example.ramithrd.lecturemanagementsystem;
 
 import android.app.Application;
 
+import com.example.ramithrd.lecturemanagementsystem.Model.User;
+
 /**
  * Created by RamithRD on 3/14/2017.
  */
 
 public class GlobalClass extends Application {
 
-    private String lecturerID;
-    private String studentID;
+    private User userInfo;
 
     @Override
     public void onCreate() {
@@ -17,19 +18,12 @@ public class GlobalClass extends Application {
 
     }
 
-    public String getLecturerID() {
-        return lecturerID;
+    public User getUserInfo() {
+        return userInfo;
     }
 
-    public void setLecturerID(String lecturerID) {
-        this.lecturerID = lecturerID;
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
-    public String getStudentID() {
-        return studentID;
-    }
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
-    }
 }

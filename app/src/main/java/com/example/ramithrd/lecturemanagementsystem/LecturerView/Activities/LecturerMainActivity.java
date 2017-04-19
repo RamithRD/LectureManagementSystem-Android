@@ -38,14 +38,19 @@ public class LecturerMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecturer_main);
 
-        User userInfo = getIntent().getExtras().getParcelable("userDetails");
-
         globalClass = ((GlobalClass) getApplicationContext());
-        //set id of lecturere after logging in
-        globalClass.setLecturerID(userInfo.getUserId());
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("userDetails")) {
+                User userInfo = extras.getParcelable("userDetails");
+                globalClass.setUserInfo(userInfo);
+            }
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Hello, "+userInfo.getFirst_name()+"!");
+        toolbar.setTitle("Hello, "+globalClass.getUserInfo().getFirst_name()+"!");
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three

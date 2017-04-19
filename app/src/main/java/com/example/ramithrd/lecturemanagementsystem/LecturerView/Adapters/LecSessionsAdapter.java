@@ -56,8 +56,13 @@ public class LecSessionsAdapter extends RecyclerView.Adapter<LecSessionsViewHold
 
         holder.moduleIdTxt.setText(lecSession.getModule_Id());
         holder.moduleNameTxt.setText(lecSession.getModule_name());
-        holder.startTimeTxt.setText(lecSession.getLec_start_time());
-        holder.endTimeTxt.setText(lecSession.getLec_end_time());
+
+        String startTime = lecSession.getLec_start_time();
+        holder.startTimeTxt.setText(startTime.substring(startTime.indexOf(' ')));
+
+        String endTime = lecSession.getLec_end_time();
+        holder.endTimeTxt.setText(endTime.substring(endTime.indexOf(' ')));
+
         String lecVenue = lecSession.getLecture_hall()+" ("+lecSession.getFaculty()+")";
         holder.venueTxt.setText(lecVenue);
         holder.batchNameTxt.setText(lecSession.getBatch_name());

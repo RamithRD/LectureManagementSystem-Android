@@ -72,7 +72,7 @@ public class StudentMonthFragment extends Fragment implements OnDateSelectedList
         final String ENDPOINT_URL  = getContext().getString(R.string.student_service_url);
 
         globalClass = ((GlobalClass) getContext().getApplicationContext());
-        studentId  = globalClass.getStudentID();
+        studentId  = globalClass.getUserInfo().getUserId();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOINT_URL)

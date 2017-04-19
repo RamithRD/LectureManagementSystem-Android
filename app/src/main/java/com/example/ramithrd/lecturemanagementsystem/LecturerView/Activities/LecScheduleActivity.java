@@ -3,6 +3,7 @@ package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
@@ -102,11 +104,14 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     private String taskMode = "";
     private Session sessionToUpdate;
 
+    private LinearLayout lecScheduleContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lec_schedule);
+
+        lecScheduleContainer = (LinearLayout) findViewById(R.id.lecScheduleContainer);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -120,7 +125,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
         final String ENDPOINT_URL  = getString(R.string.lecturer_service_url);
 
-        mLoadDetailsDialog = new ProgressDialog(getApplicationContext());
+        mLoadDetailsDialog = new ProgressDialog(this);
         addLectureSession = (Button) findViewById(R.id.addLectureSessionBtn);
 
 
@@ -147,7 +152,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         });
 
         globalClass = ((GlobalClass) getApplicationContext());
-        lecturerID =  globalClass.getLecturerID();
+        lecturerID =  globalClass.getUserInfo().getUserId();
 
         startTimeLayout = (TextInputLayout) findViewById(R.id.schedule_start_time_layout);
         endTimeLayout = (TextInputLayout) findViewById(R.id.schedule_end_time_layout);
@@ -416,6 +421,10 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
     private void addLecture() {
 
+        mLoadDetailsDialog.setMessage("Adding Lecture ...");
+        mLoadDetailsDialog.setCancelable(false);
+        mLoadDetailsDialog.show();
+
         String lecDateString = selectedLecDate+" "+selectedLecStartTime;
         String lecStartString = selectedLecDate+" "+selectedLecStartTime;
         String lecEndString = selectedLecDate+" "+selectedLecEndTime;
@@ -462,6 +471,14 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         addLectureSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+
+                mLoadDetailsDialog.hide();
+
+                Snackbar snackbar = Snackbar
+                        .make(lecScheduleContainer, "New Lecture Scheduled Successfully!", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
                 Boolean b = response.body();
                 System.out.println("REAL val"+b);
                 System.out.println("Success");
@@ -471,6 +488,11 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
+                mLoadDetailsDialog.hide();
+                Snackbar snackbar = Snackbar
+                        .make(lecScheduleContainer, "Error Occured While Adding New LEcture, Please Try Again!", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
                 System.out.println("Failure "+t.getMessage());
             }
         });
@@ -478,6 +500,10 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     }
 
     private void updateLecture(Session session){
+
+        mLoadDetailsDialog.setMessage("Updating Lecture ...");
+        mLoadDetailsDialog.setCancelable(false);
+        mLoadDetailsDialog.show();
 
         String lecDateString = selectedLecDate+" "+selectedLecStartTime;
         String lecStartString = selectedLecDate+" "+selectedLecStartTime;
@@ -526,6 +552,8 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         updateSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+
+
                 Boolean b = response.body();
                 System.out.println("REAL val"+b);
                 System.out.println("Success");
@@ -534,6 +562,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
                 System.out.println("Failure "+t.getMessage());
+
             }
         });
 
@@ -541,6 +570,14 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         updateSessionTimes.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+
+                mLoadDetailsDialog.hide();
+
+                Snackbar snackbar = Snackbar
+                        .make(lecScheduleContainer, "Lecture Session Successfully Updated!", Snackbar.LENGTH_LONG);
+
+                snackbar.show();
+
                 Boolean b = response.body();
                 System.out.println("REAL val"+b);
                 System.out.println("Success : times updated");
@@ -548,7 +585,11 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
             @Override
             public void onFailure(Call<Boolean> call, Throwable t) {
+                mLoadDetailsDialog.hide();
+                Snackbar snackbar = Snackbar
+                        .make(lecScheduleContainer, "Error Occured While Updating Session, Please Try Again!", Snackbar.LENGTH_LONG);
 
+                snackbar.show();
             }
         });
 

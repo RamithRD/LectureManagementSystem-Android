@@ -85,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (!validateFields()) {
 
-
                         mLoginProg.setMessage("Signing In ...");
                         mLoginProg.setCancelable(false);
                         mLoginProg.show();
@@ -104,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (!responseBody.isEmpty()) {
 
-                                mLoginProg.hide();
-
                                 String[] loginInfo = responseBody.split("\\-");
 
                                 User user = new User();
@@ -113,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                                 user.setUserId(loginInfo[1]);
                                 user.setFirst_name(loginInfo[2]);
                                 user.setLast_name(loginInfo[3]);
+
+                                mLoginProg.hide();
 
                                 switch (user.getUser_role()) {
 
