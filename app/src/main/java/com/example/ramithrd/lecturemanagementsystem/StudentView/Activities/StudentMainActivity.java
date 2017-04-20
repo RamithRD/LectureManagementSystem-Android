@@ -183,7 +183,8 @@ public class StudentMainActivity extends AppCompatActivity {
                     Toast.makeText(this, sessionIDStr, Toast.LENGTH_LONG).show();
 
                 }else{
-                    Toast.makeText(this,"Invalid Qr Code Scan!", Toast.LENGTH_LONG).show();
+                    mAttendanceProgress.hide();
+                    Toast.makeText(this,"Invalid Qr Code Scanned!", Toast.LENGTH_LONG).show();
                 }
 
             }
