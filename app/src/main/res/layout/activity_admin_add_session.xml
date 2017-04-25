@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/adminAddSessionContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ramithrd.lecturemanagementsystem.AdminsView.Activities.AdminAddSessionActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_unis_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select University"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_lecturer_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select Lecturer"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_programmes_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select Programme"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_batch_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select Batch"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_module_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select Module"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/adm_hall_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                app:ms_background_color="#009688"
+                android:text="Select Lecture Hall"/>
+
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0px"
+                android:layout_height="0px"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/adm_schedule_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/adm_schedule_picked_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="Lecture Date"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/adm_lecDateBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:src="@drawable/ic_calendar_grey600_24dp"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/adm_schedule_start_time_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/adm_schedule_picked_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/lec_start_time"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/adm_schedule_end_time_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/adm_schedule_end_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/lec_end_time"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textColorHint="@color/colorPrimaryDark"
+                        android:textColorLink="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/adm_lecTimeBtn"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:src="@drawable/ic_clock_grey600_24dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/adm_addLectureSessionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/login_register_btn_bg"
+                android:text="@string/schedule_activity_button"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

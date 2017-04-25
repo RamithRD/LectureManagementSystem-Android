@@ -3,6 +3,16 @@
     package="com.example.ramithrd.lecturemanagementsystem">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <receiver
+        android:name=".NetworkChangeReceiver"
+        android:label="NetworkChangeReceiver">
+        <intent-filter>
+            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+        </intent-filter>
+    </receiver>
 
     <application
         android:name=".GlobalClass"
@@ -14,8 +24,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,23 +35,42 @@
         <activity
             android:name=".LecturerView.Activities.LecturerMainActivity"
             android:label="@string/title_activity_lecturer_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LecturerView.Activities.LecScheduleActivity"
             android:label="Add Lecture Session"
-            android:parentActivityName=".LecturerView.Activities.LecturerMainActivity" />
+            android:parentActivityName=".LecturerView.Activities.LecturerMainActivity">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".StudentView.Activities.StudentMainActivity"
             android:label="@string/title_activity_student_main"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </activity>
         <activity android:name=".LecturerView.Activities.SessionsActivity" />
-        <activity android:name=".StudentView.Activities.StudentsLecActivity"></activity>
-        <activity android:name=".StudentView.Activities.QrCaptureActivityPortrait"
+        <activity android:name=".StudentView.Activities.StudentsLecActivity" />
+        <activity
+            android:name=".StudentView.Activities.QrCaptureActivityPortrait"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".AdminsView.Activities.AdminMainActivity"
+            android:label="@string/title_activity_admin_main"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AdminsView.Activities.AdminAddSessionActivity" />
+        <activity android:name=".AdminsView.Activities.AdminSessionsActivity"></activity>
     </application>
 
 </manifest>

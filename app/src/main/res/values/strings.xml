@@ -13,7 +13,12 @@
     <string name="lec_end_time">End Time</string>
     <string name="title_activity_student_main">StudentMainActivity</string>
     <string name="title_activity_sessions">SessionsActivity</string>
+    <string name="title_activity_admin_main">AdminMainActivity</string>
 
+
+    <string name="login_service_url">http://54.214.72.150:55446/Service.svc/</string>
     <string name="lecturer_service_url">http://54.214.72.150/Service.svc/</string>
     <string name="student_service_url">http://54.214.72.150:55446/Service.svc/</string>
+    <string name="admin_service_url">http://54.214.72.150:55446/Service.svc/</string>
+
 </resources>

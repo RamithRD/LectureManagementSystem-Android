@@ -52,7 +52,7 @@ public class AdminAdapter extends RecyclerView.Adapter<AdminViewHolder> {
 
         lecSession = sessionsList.get(position);
 
-        holder.lecturerNameTxt.setText(lecSession.getLecturer_name());
+        holder.lecturerNameTxt.setText(lecSession.getLecturer_fname()+" "+lecSession.getLecturer_lname());
 
         holder.moduleIdTxt.setText(lecSession.getModule_Id());
         holder.moduleNameTxt.setText(lecSession.getModule_name());
