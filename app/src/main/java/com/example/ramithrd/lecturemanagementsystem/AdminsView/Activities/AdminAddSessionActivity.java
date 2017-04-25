@@ -1,4 +1,4 @@
-package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
+package com.example.ramithrd.lecturemanagementsystem.AdminsView.Activities;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -25,15 +25,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
+import com.example.ramithrd.lecturemanagementsystem.AdminsView.Interfaces.AdminService;
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
 import com.example.ramithrd.lecturemanagementsystem.Helpers.NetworkCheck;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecScheduleActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Model.Batch;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureHall;
 import com.example.ramithrd.lecturemanagementsystem.Model.LectureSession;
+import com.example.ramithrd.lecturemanagementsystem.Model.Lecturer;
 import com.example.ramithrd.lecturemanagementsystem.Model.Module;
 import com.example.ramithrd.lecturemanagementsystem.Model.Programme;
 import com.example.ramithrd.lecturemanagementsystem.Model.Session;
@@ -59,7 +61,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LecScheduleActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
+public class AdminAddSessionActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener  {
+
 
     private ImageButton pickLecTime;
     private ImageButton pickLecDate;
@@ -73,12 +76,14 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     private EditText selectedDateTxt;
 
     private MaterialSpinner universitiesSpinner;
+    private MaterialSpinner lecturerSpinner;
     private MaterialSpinner programmesSpinner;
     private MaterialSpinner batchesSpinner;
     private MaterialSpinner modulesSpinner;
     private MaterialSpinner lectureHallsSpinner;
 
     private List<String> universitiesList;
+    private List<String> lecsList;
     private List<String> progsList;
     private List<String> batchesList;
     private List<String> moduleList;
@@ -88,12 +93,13 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
     private HashMap<String, String> uniMap;
     private HashMap<String, String> programmeMap;
+    private HashMap<String, String> lecturersMap;
     private HashMap<String, String> moduleMap;
 
     private int mYear, mMonth, mDay;
 
     private GlobalClass globalClass;
-    private String lecturerID = "";
+    private String adminID = "";
 
     private String selectedUniversityId = "";
     private String selectedProgrammeId = "";
@@ -104,12 +110,13 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     private String selectedLecDate = "";
     private String selectedLecStartTime = "";
     private String selectedLecEndTime = "";
+    private String selectedLecturerId = "";
 
 
     private ProgressDialog mLoadDetailsDialog;
     private Button addLectureSession;
 
-    private LectureSessionService lecSessionService;
+    private AdminService adminService;
 
     private String taskMode = "";
     private Session sessionToUpdate;
@@ -119,9 +126,9 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lec_schedule);
+        setContentView(R.layout.activity_admin_add_session);
 
-        lecScheduleContainer = (LinearLayout) findViewById(R.id.lecScheduleContainer);
+        lecScheduleContainer = (LinearLayout) findViewById(R.id.adminAddSessionContainer);
 
         registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -167,11 +174,10 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             taskMode = "add";
         }
 
-        final String ENDPOINT_URL  = getString(R.string.lecturer_service_url);
+        final String ENDPOINT_URL  = getString(R.string.admin_service_url);
 
         mLoadDetailsDialog = new ProgressDialog(this);
-        addLectureSession = (Button) findViewById(R.id.addLectureSessionBtn);
-
+        addLectureSession = (Button) findViewById(R.id.adm_addLectureSessionBtn);
 
         addLectureSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,18 +202,19 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         });
 
         globalClass = ((GlobalClass) getApplicationContext());
-        lecturerID =  globalClass.getUserInfo().getUserId();
+        adminID =  globalClass.getUserInfo().getUserId();
 
-        startTimeLayout = (TextInputLayout) findViewById(R.id.schedule_start_time_layout);
-        endTimeLayout = (TextInputLayout) findViewById(R.id.schedule_end_time_layout);
-        dateLayout = (TextInputLayout) findViewById(R.id.schedule_date_layout);
+        startTimeLayout = (TextInputLayout) findViewById(R.id.adm_schedule_start_time_layout);
+        endTimeLayout = (TextInputLayout) findViewById(R.id.adm_schedule_end_time_layout);
+        dateLayout = (TextInputLayout) findViewById(R.id.adm_schedule_date_layout);
 
-        selectedStartTimeTxt = (EditText) findViewById(R.id.schedule_picked_layout);
-        selectedEndTimeTxt = (EditText) findViewById(R.id.schedule_end_time);
-        selectedDateTxt = (EditText) findViewById(R.id.schedule_picked_date);
+        selectedStartTimeTxt = (EditText) findViewById(R.id.adm_schedule_picked_layout);
+        selectedEndTimeTxt = (EditText) findViewById(R.id.adm_schedule_end_time);
+        selectedDateTxt = (EditText) findViewById(R.id.adm_schedule_picked_date);
 
         uniMap = new HashMap<>();
         programmeMap = new HashMap<>();
+        lecturersMap = new HashMap<>();
         moduleMap = new HashMap<>();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -216,8 +223,9 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        lecSessionService = retrofit.create(LectureSessionService.class);
+        adminService = retrofit.create(AdminService.class);
 
+        lecturerSpinner = (MaterialSpinner) findViewById(R.id.adm_lecturer_spinner);
         universitiesSpinner = (MaterialSpinner) findViewById(R.id.unis_spinner);
         universitiesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -227,7 +235,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                 selectedUniversityId = uniMap.get(uniName);
                 System.out.println("I2K University :"+selectedUniversityId);
 
-                Call<List<Programme>> programmeRequest = lecSessionService.getProgrammes(lecturerID,selectedUniversityId);
+                Call<List<Programme>> programmeRequest = adminService.getProgrammes(adminID,selectedUniversityId);
                 programmeRequest.enqueue(new Callback<List<Programme>>() {
                     @Override
                     public void onResponse(Call<List<Programme>> call, Response<List<Programme>> response) {
@@ -250,8 +258,33 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
                     }
                 });
+
+                Call<List<Lecturer>> lecturersRequest = adminService.getLecturers(selectedUniversityId);
+                lecturersRequest.enqueue(new Callback<List<Lecturer>>() {
+                    @Override
+                    public void onResponse(Call<List<Lecturer>> call, Response<List<Lecturer>> response) {
+                        List<Lecturer> lecturersList = response.body();
+                        lecsList = new ArrayList<String>();
+                        lecsList.add("Select Lecturer");
+
+                        for(Lecturer lec: lecturersList){
+
+                            lecsList.add(lec.getFirst_Name()+" "+lec.getLast_Name());
+                            lecturersMap.put(lec.getFirst_Name()+" "+lec.getLast_Name(),lec.getLecturer_Id());
+
+                        }
+
+                        lecturerSpinner.setItems(lecsList);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Lecturer>> call, Throwable t) {
+
+                    }
+                });
             }
         });
+
         programmesSpinner = (MaterialSpinner) findViewById(R.id.programmes_spinner);
         programmesSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -260,7 +293,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                 String programName = item.toString();
                 selectedProgrammeId = programmeMap.get(programName);
                 System.out.println("I2K Programme :"+selectedProgrammeId);
-                Call<List<Batch>> batchRequest = lecSessionService.getBatches(lecturerID,selectedProgrammeId);
+                Call<List<Batch>> batchRequest = adminService.getBatches(adminID,selectedProgrammeId);
                 batchRequest.enqueue(new Callback<List<Batch>>() {
                     @Override
                     public void onResponse(Call<List<Batch>> call, Response<List<Batch>> response) {
@@ -285,7 +318,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                     }
                 });
 
-                Call<List<Module>> modulesRequest = lecSessionService.getModules(lecturerID,selectedProgrammeId);
+                Call<List<Module>> modulesRequest = adminService.getModules(adminID,selectedProgrammeId);
                 modulesRequest.enqueue(new Callback<List<Module>>() {
                     @Override
                     public void onResponse(Call<List<Module>> call, Response<List<Module>> response) {
@@ -310,6 +343,14 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                     }
                 });
 
+            }
+        });
+        lecturerSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                String lecturername = item.toString();
+                selectedLecturerId = lecturersMap.get(lecturername);
+                System.out.println("Lecture id:"+selectedModuleId);
             }
         });
         batchesSpinner = (MaterialSpinner) findViewById(R.id.batch_spinner);
@@ -340,7 +381,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         });
 
 
-        Call<List<University>> uniRequest =  lecSessionService.getUniversities(lecturerID);
+        Call<List<University>> uniRequest =  adminService.getUniversities(adminID);
         uniRequest.enqueue(new Callback<List<University>>() {
             @Override
             public void onResponse(Call<List<University>> call, Response<List<University>> response) {
@@ -366,7 +407,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             }
         });
 
-        Call<List<LectureHall>> lecHallRequest = lecSessionService.getLectureHalls();
+        Call<List<LectureHall>> lecHallRequest = adminService.getLectureHalls();
         lecHallRequest.enqueue(new Callback<List<LectureHall>>() {
             @Override
             public void onResponse(Call<List<LectureHall>> call, Response<List<LectureHall>> response) {
@@ -401,7 +442,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
                 Calendar now = Calendar.getInstance();
                 TimePickerDialog timePicker = TimePickerDialog.newInstance(
-                        LecScheduleActivity.this,
+                        AdminAddSessionActivity.this,
                         now.get(Calendar.HOUR_OF_DAY),
                         now.get(Calendar.MINUTE),
                         false
@@ -428,7 +469,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
                 mMonth = calendar.get(Calendar.MONTH);
                 mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePicker = new DatePickerDialog(LecScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(AdminAddSessionActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -446,7 +487,6 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             }
         });
 
-
         switch (taskMode){
 
             case "add":{
@@ -461,6 +501,8 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
 
         }
+
+
     }
 
     private void addLecture() {
@@ -496,9 +538,10 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         final long lectureEndDateTime = endDateTime.getTime();
         final String lecEndDate = "/Date("+lectureEndDateTime+")/";
 
+        //TODO add lecturer name
         LectureSession lecSession = new LectureSession();
-        lecSession.setUserId(lecturerID);
-        lecSession.setLecturerId(lecturerID);
+        lecSession.setUserId(adminID);
+        lecSession.setLecturerId(selectedLecturerId);
         lecSession.setBatchId(selectedBatchId);
         lecSession.setModuleId(selectedModuleId);
         lecSession.setUniversityId(selectedUniversityId);
@@ -512,7 +555,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         System.out.println("DATE : "+lecDate+"\n LexStart :"+lecStartDate+"\n LecEnd : "+lecEndDate);
 
         //TODO response returns an int, if int == 0 ---> error __ else if int > 0 ----> success
-        Call<Integer> addLectureSession = lecSessionService.AddSession(lecSession);
+        Call<Integer> addLectureSession = adminService.AddSession(lecSession);
         addLectureSession.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
@@ -579,8 +622,8 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
         LectureSession lecSession = new LectureSession();
         lecSession.setSessionId(session.getSession_Id());
-        lecSession.setUserId(lecturerID);
-        lecSession.setLecturerId(lecturerID);
+        lecSession.setUserId(adminID);
+        lecSession.setLecturerId(selectedLecturerId);
         lecSession.setBatchId(selectedBatchId);
         lecSession.setModuleId(selectedModuleId);
         lecSession.setUniversityId(selectedUniversityId);
@@ -593,7 +636,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
         System.out.println("Session ID : "+session.getSession_Id());
 
-        Call<Boolean> updateSession = lecSessionService.updateSession(lecSession);
+        Call<Boolean> updateSession = adminService.updateSession(lecSession);
         updateSession.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -611,7 +654,7 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
             }
         });
 
-        Call<Boolean> updateSessionTimes = lecSessionService.updateSessionDateTime(lecSession);
+        Call<Boolean> updateSessionTimes = adminService.updateSessionDateTime(lecSession);
         updateSessionTimes.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -641,13 +684,6 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-
-    @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
 
         String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
@@ -663,30 +699,6 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
 
         selectedStartTimeTxt.setText(startTime);
         selectedEndTimeTxt.setText(endTime);
-    }
-
-    private static OkHttpClient getOkHttpClient(){
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
-        OkHttpClient okClient = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-        return okClient;
-    }
-
-    private void setSessionDetails(){
-
-        //remove the date from start and end times
-        String startTimefull = sessionToUpdate.getLec_start_time();
-        String endTimeFull = sessionToUpdate.getLec_end_time();
-
-        String[] startTimeArr = startTimefull.split(" ");
-        String[] endTimeArr = endTimeFull.split(" ");
-
-        selectedStartTimeTxt.setText(startTimeArr[1]);
-        selectedEndTimeTxt.setText(endTimeArr[1]);
-        selectedDateTxt.setText(sessionToUpdate.getLec_date());
-
     }
 
     private boolean validateFields(){
@@ -761,5 +773,29 @@ public class LecScheduleActivity extends AppCompatActivity implements TimePicker
         }
 
         return errorOccurred;
+    }
+
+    private void setSessionDetails(){
+
+        //remove the date from start and end times
+        String startTimefull = sessionToUpdate.getLec_start_time();
+        String endTimeFull = sessionToUpdate.getLec_end_time();
+
+        String[] startTimeArr = startTimefull.split(" ");
+        String[] endTimeArr = endTimeFull.split(" ");
+
+        selectedStartTimeTxt.setText(startTimeArr[1]);
+        selectedEndTimeTxt.setText(endTimeArr[1]);
+        selectedDateTxt.setText(sessionToUpdate.getLec_date());
+
+    }
+
+    private static OkHttpClient getOkHttpClient(){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
+        OkHttpClient okClient = new OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build();
+        return okClient;
     }
 }

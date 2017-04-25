@@ -1,18 +1,29 @@
 package com.example.ramithrd.lecturemanagementsystem;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
+import com.example.ramithrd.lecturemanagementsystem.AdminsView.Activities.AdminMainActivity;
+import com.example.ramithrd.lecturemanagementsystem.Helpers.NetworkCheck;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecturerMainActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Interfaces.LectureSessionService;
 import com.example.ramithrd.lecturemanagementsystem.Model.User;
@@ -74,8 +85,49 @@ public class LoginActivity extends AppCompatActivity {
         System.out.println("SHA VALUE :"+pass);
 
         lecSessionService = retrofit.create(LectureSessionService.class);
-
         sign_in_btn = (Button) findViewById(R.id.btn_signin);
+
+        registerReceiver(new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+
+                int status = NetworkCheck.getConnectivityStatusString(context);
+
+                if(status == 0){
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Window window = getWindow();
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(Color.RED);
+                    }
+
+                    Snackbar.make(loginContainer, "Device Offline, Sign in Disabled!", Snackbar.LENGTH_LONG)
+                            .setAction("GO ONLINE", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setActionTextColor(getResources()
+                                    .getColor(android.R.color.holo_red_light))
+                            .show();
+
+                    sign_in_btn.setEnabled(false);
+
+                }else{
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Window window = getWindow();
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(Color.parseColor("#00796B"));
+                    }
+
+                    sign_in_btn.setEnabled(true);
+                }
+
+            }}, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+
+
         sign_in_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +185,14 @@ public class LoginActivity extends AppCompatActivity {
                                         break;
                                     }
 
+                                    case "admin":{
+                                        Intent lectureIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                                        lectureIntent.putExtra("userDetails", user);
+                                        lectureIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(lectureIntent);
+                                        break;
+                                    }
+
                                 }
 
                             }
@@ -148,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                             mEmail.requestFocus();
                             mPassword.setText("");
                             Snackbar snackbar = Snackbar
-                                    .make(loginContainer, "Incorrect Login Credentials, Please Try Again!", Snackbar.LENGTH_LONG);
+                                    .make(loginContainer, "Login Error Occured, Please Try Again!", Snackbar.LENGTH_LONG);
 
                             snackbar.show();
                         }
@@ -198,6 +258,16 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         return validationErrorOccurred;
+
+    }
+
+
+    public boolean isUserOnline(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
 
     }
 }

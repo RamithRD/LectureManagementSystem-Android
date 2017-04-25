@@ -43,7 +43,7 @@ public interface LectureSessionService {
     Call<List<LectureHall>> getLectureHalls();
 
     @POST("Session")
-    Call<Boolean> AddSession(@Body LectureSession lectureSession);
+    Call<Integer> AddSession(@Body LectureSession lectureSession);
 
     @GET("Sessions/{lecturerId}")
     Call<List<LectureSession>> getAllSessions(@Path("lecturerId")String lecturerId);

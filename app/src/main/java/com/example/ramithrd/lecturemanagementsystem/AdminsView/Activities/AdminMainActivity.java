@@ -1,4 +1,4 @@
-package com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities;
+package com.example.ramithrd.lecturemanagementsystem.AdminsView.Activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,9 +8,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,22 +19,26 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.ramithrd.lecturemanagementsystem.GlobalClass;
 import com.example.ramithrd.lecturemanagementsystem.Helpers.NetworkCheck;
+import com.example.ramithrd.lecturemanagementsystem.LecturerView.Activities.LecturerMainActivity;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerMonthFragment;
 import com.example.ramithrd.lecturemanagementsystem.LecturerView.Fragments.LecturerTodayFragment;
-import com.example.ramithrd.lecturemanagementsystem.LoginActivity;
 import com.example.ramithrd.lecturemanagementsystem.Model.User;
 import com.example.ramithrd.lecturemanagementsystem.R;
 
-public class LecturerMainActivity extends AppCompatActivity{
+public class AdminMainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -42,19 +46,18 @@ public class LecturerMainActivity extends AppCompatActivity{
 
     private GlobalClass globalClass;
 
-    private CoordinatorLayout lecMainContainer;
+    private FloatingActionButton addSessionfab;
 
-    private FloatingActionButton addLecFab;
-
+    private LinearLayout adminMainContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lecturer_main);
+        setContentView(R.layout.activity_admin_main);
+
+        adminMainContainer = (LinearLayout) findViewById(R.id.admin_main_content);
 
         globalClass = ((GlobalClass) getApplicationContext());
-        lecMainContainer = (CoordinatorLayout) findViewById(R.id.main_content);
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey("userDetails")) {
@@ -65,9 +68,7 @@ public class LecturerMainActivity extends AppCompatActivity{
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Hello, "+globalClass.getUserInfo().getFirst_name()+"!");
         setSupportActionBar(toolbar);
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -79,17 +80,14 @@ public class LecturerMainActivity extends AppCompatActivity{
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        addLecFab = (FloatingActionButton) findViewById(R.id.fab_new_lecture);
-        addLecFab.setOnClickListener(new View.OnClickListener() {
+        addSessionfab = (FloatingActionButton) findViewById(R.id.admin_fab);
+        addSessionfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent addScheduleIntent = new Intent(LecturerMainActivity.this, LecScheduleActivity.class);
+                Intent addScheduleIntent = new Intent(AdminMainActivity.this, AdminAddSessionActivity.class);
                 startActivity(addScheduleIntent);
-
             }
         });
-
 
         registerReceiver(new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -104,7 +102,7 @@ public class LecturerMainActivity extends AppCompatActivity{
                         window.setStatusBarColor(Color.RED);
                     }
 
-                    Snackbar.make(lecMainContainer, "Device Offline, Some Features Will Not Function Properly!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(adminMainContainer, "Device Offline, Some Features Will Not Function Properly!", Snackbar.LENGTH_LONG)
                             .setAction("GO ONLINE", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -116,52 +114,43 @@ public class LecturerMainActivity extends AppCompatActivity{
                                     .getColor(android.R.color.holo_red_light))
                             .show();
 
-                    addLecFab.setEnabled(false);
+                    addSessionfab.setEnabled(false);
 
                 }else{
-
-                    addLecFab.setEnabled(true);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Window window = getWindow();
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                         window.setStatusBarColor(Color.parseColor("#00796B"));
                     }
+
+                    addSessionfab.setEnabled(true);
                 }
 
             }}, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_lecturer_main, menu);
+        getMenuInflater().inflate(R.menu.menu_admin_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sign_out) {
-            Intent loginIntent = new Intent(LecturerMainActivity.this, LoginActivity.class);
-            loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(loginIntent);
+        if (id == R.id.action_settings) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -170,7 +159,6 @@ public class LecturerMainActivity extends AppCompatActivity{
 
         @Override
         public Fragment getItem(int position) {
-
             if(position == 0){
 
                 return LecturerTodayFragment.newInstance();
@@ -199,6 +187,4 @@ public class LecturerMainActivity extends AppCompatActivity{
             return null;
         }
     }
-
-
 }

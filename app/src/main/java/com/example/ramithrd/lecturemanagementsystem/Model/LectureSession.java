@@ -26,6 +26,12 @@ private Object lecturer;
 @SerializedName("Lecturer_Id")
 @Expose
 private String lecturerId;
+@SerializedName("Lecturer_First_Name")
+@Expose
+private String Lecturer_First_Name;
+@SerializedName("Lecturer_Last_Name")
+@Expose
+private String Lecturer_Last_Name;
 @SerializedName("Module")
 @Expose
 private Object module;
@@ -133,6 +139,22 @@ return lecturerId;
 public void setLecturerId(String lecturerId) {
 this.lecturerId = lecturerId;
 }
+
+public String getLecturer_First_Name() {
+        return Lecturer_First_Name;
+    }
+
+public void setLecturer_First_Name(String lecturer_First_Name) {
+        Lecturer_First_Name = lecturer_First_Name;
+    }
+
+public String getLecturer_Last_Name() {
+        return Lecturer_Last_Name;
+    }
+
+public void setLecturer_Last_Name(String lecturer_Last_Name) {
+        Lecturer_Last_Name = lecturer_Last_Name;
+    }
 
 public Object getModule() {
 return module;

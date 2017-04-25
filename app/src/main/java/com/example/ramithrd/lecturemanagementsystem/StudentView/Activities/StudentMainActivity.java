@@ -162,8 +162,10 @@ public class StudentMainActivity extends AppCompatActivity {
 
                     LecAttendance attendance = new LecAttendance();
                     attendance.setSession_Id(sessionId[1]);
-                    attendance.setSession_Id(globalClass.getUserInfo().getUserId());
+                    attendance.setUser_Id(globalClass.getUserInfo().getUserId());
                     attendance.setStudent_Id(globalClass.getUserInfo().getUserId());
+
+                    System.out.println("ATT DETAILS "+attendance.getSession_Id()+" Std ID :"+attendance.getStudent_Id());
 
                     Call<Boolean> sendAttendance = studentService.addAttendance(attendance);
                     sendAttendance.enqueue(new Callback<Boolean>() {

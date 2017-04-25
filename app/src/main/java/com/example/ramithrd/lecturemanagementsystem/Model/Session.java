@@ -11,7 +11,8 @@ public class Session implements Parcelable {
 
     private int session_Id;
     private String lecturer_Id;
-    private String lecturer_name;
+    private String lecturer_fname;
+    private String lecturer_lname;
     private String module_Id;
     private String module_name;
     private String batch_name;
@@ -39,12 +40,20 @@ public class Session implements Parcelable {
         this.lecturer_Id = lecturer_Id;
     }
 
-    public String getLecturer_name() {
-        return lecturer_name;
+    public String getLecturer_fname() {
+        return lecturer_fname;
     }
 
-    public void setLecturer_name(String lecturer_name) {
-        this.lecturer_name = lecturer_name;
+    public void setLecturer_fname(String lecturer_fname) {
+        this.lecturer_fname = lecturer_fname;
+    }
+
+    public String getLecturer_lname() {
+        return lecturer_lname;
+    }
+
+    public void setLecturer_lname(String lecturer_lname) {
+        this.lecturer_lname = lecturer_lname;
     }
 
     public String getModule_Id() {
@@ -136,7 +145,8 @@ public class Session implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.session_Id);
         dest.writeString(this.lecturer_Id);
-        dest.writeString(this.lecturer_name);
+        dest.writeString(this.lecturer_fname);
+        dest.writeString(this.lecturer_lname);
         dest.writeString(this.module_Id);
         dest.writeString(this.module_name);
         dest.writeString(this.batch_name);
@@ -155,7 +165,8 @@ public class Session implements Parcelable {
     protected Session(Parcel in) {
         this.session_Id = in.readInt();
         this.lecturer_Id = in.readString();
-        this.lecturer_name = in.readString();
+        this.lecturer_fname = in.readString();
+        this.lecturer_lname = in.readString();
         this.module_Id = in.readString();
         this.module_name = in.readString();
         this.batch_name = in.readString();
